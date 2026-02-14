@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+  <title>TBM도우미</title>
+  <meta name="theme-color" content="#2E7D32">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-left">
+    <button id="btnBack" class="icon-btn" aria-label="뒤로" hidden>‹</button>
+    <button id="btnHome" class="icon-btn" aria-label="홈" hidden>⌂</button>
+    <div class="topbar-title">
+      <div class="title" id="pageTitle">TBM도우미</div>
+      <div class="subtitle" id="pageSub">현장 TBM 회의록</div>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <button id="btnAction" class="pill-btn" hidden></button>
+  </div>
+</header>
+
+<main class="container" id="app"></main>
+
+<!-- HOME -->
+<template id="tpl-home">
+  <section class="list">
+    <a class="card nav" href="#/tbm/new">
+      <div class="card-icon shield">📝</div>
+      <div class="card-body">
+        <div class="card-title">TBM 회의록 작성</div>
+        <div class="card-sub">작업정보 · 위험요인/대책 · 체크리스트 · 서명 · 사진 · PDF</div>
+      </div>
+      <div class="card-arrow">›</div>
+    </a>
+
+    <a class="card nav" href="#/tbm/list">
+      <div class="card-icon folder">📁</div>
+      <div class="card-body">
+        <div class="card-title">저장된 TBM</div>
+        <div class="card-sub">불러오기 · 삭제 · 검색</div>
+      </div>
+      <div class="card-arrow">›</div>
+    </a>
+
+    <a class="card nav" href="#/rules">
+      <div class="card-icon ok">🛡️</div>
+      <div class="card-body">
+        <div class="card-title">5대 안전지킴이</div>
+        <div class="card-sub">안전장구 · 안전회의 · 검전접지 · 활선방호 · 작업절차</div>
+      </div>
+      <div class="card-arrow">›</div>
+    </a>
+
+    <a class="card nav" href="#/weather">
+      <div class="card-icon cloud">☁️</div>
+      <div class="card-body">
+        <div class="card-title">현장 날씨·미세먼지</div>
+        <div class="card-sub">실시간 기상 정보 및 작업 안전 경고</div>
+      </div>
+      <div class="card-arrow">›</div>
+    </a>
+
+    <a class="card nav" href="#/tasks">
+      <div class="card-icon gear">⚙️</div>
+      <div class="card-body">
+        <div class="card-title">단위작업 위험요인</div>
+        <div class="card-sub">작업 선택 → 위험요인/대책 카드</div>
+      </div>
+      <div class="card-arrow">›</div>
+    </a>
+  </section>
+</template>
+
+<!-- RULES -->
+<template id="tpl-rules">
+  <section class="list">
+    <div class="rule red"><div class="rule-badge">1</div><div class="rule-body"><div class="rule-title">착용하자! 안전장구</div><div class="rule-sub">작업에 맞는 개인보호구(안전모, 절연장갑, 안전화 등) 반드시 착용</div></div></div>
+    <div class="rule orange"><div class="rule-badge">2</div><div class="rule-body"><div class="rule-title">시행하자! 안전회의</div><div class="rule-sub">작업 전 TBM 안전회의로 위험요인·대책 공유</div></div></div>
+    <div class="rule yellow"><div class="rule-badge">3</div><div class="rule-body"><div class="rule-title">확인하자! 검전접지</div><div class="rule-sub">작업 전 검전으로 무전압 확인 후 접지 실시</div></div></div>
+    <div class="rule gold"><div class="rule-badge">4</div><div class="rule-body"><div class="rule-title">수행하자! 활선방호</div><div class="rule-sub">충전부 인근 작업 시 활선방호구 설치로 감전사고 예방</div></div></div>
+    <div class="rule green"><div class="rule-badge">5</div><div class="rule-body"><div class="rule-title">준수하자! 작업절차</div><div class="rule-sub">정해진 작업절차와 안전수칙을 준수하여 작업</div></div></div>
+  </section>
+</template>
+
+<!-- WEATHER -->
+<template id="tpl-weather">
+  <section class="panel">
+    <div class="seg">
+      <button class="seg-btn active" id="btnCity">안산시</button>
+      <button class="seg-btn" id="btnHere">현재 위치</button>
+    </div>
+
+    <div class="alert warn" id="alertCold" hidden>주의  체감온도 낮음 — 주기적 휴식, 한랭질환 증상 시 작업 자율중지 허용</div>
+    <div class="alert danger" id="alertWind" hidden>위험  풍속 10m/s 이상 — 고소작업 중지 권고</div>
+
+    <div class="bigcard" id="wxCard">
+      <div class="wx-top">
+        <div>
+          <div class="wx-loc" id="wxLoc">안산시</div>
+          <div class="wx-time" id="wxTime">-</div>
+        </div>
+        <div class="wx-icon" id="wxIcon">☀️</div>
+      </div>
+      <div class="wx-main">
+        <div class="wx-temp" id="wxFeel">체감 -</div>
+        <div class="wx-sub" id="wxDesc">-</div>
+      </div>
+      <div class="wx-kpis">
+        <div class="kpi"><div class="kpi-t">습도</div><div class="kpi-v" id="wxHum">-</div></div>
+        <div class="kpi"><div class="kpi-t">풍속</div><div class="kpi-v" id="wxWind">-</div></div>
+        <div class="kpi"><div class="kpi-t">기온</div><div class="kpi-v" id="wxTemp">-</div></div>
+      </div>
+    </div>
+
+    <div class="bigcard">
+      <div class="card-title">대기질 (미세먼지)</div>
+      <div class="aq-grid">
+        <div class="aq-box">
+          <div class="aq-t">미세먼지 (PM10)</div>
+          <div class="aq-v" id="pm10">-</div>
+          <div class="aq-q" id="pm10q">-</div>
+        </div>
+        <div class="aq-box">
+          <div class="aq-t">초미세먼지 (PM2.5)</div>
+          <div class="aq-v" id="pm25">-</div>
+          <div class="aq-q" id="pm25q">-</div>
+        </div>
+      </div>
+      <div class="muted small">기준(권장): 좋음 0~30 · 보통 31~80 · 나쁨 81~150 · 매우나쁨 151+</div>
+    </div>
+  </section>
+</template>
+
+<!-- TASK LIST -->
+<template id="tpl-tasklist">
+  <section class="panel">
+    <div class="desc">단위 작업을 선택하면 위험요인/안전대책 카드가 표시됩니다. “TBM로 가져오기” 버튼으로 회의록에 자동 반영할 수 있습니다.</div>
+    <div class="list" id="taskList"></div>
+  </section>
+</template>
+
+<!-- TASK DETAIL -->
+<template id="tpl-taskdetail">
+  <section class="panel">
+    <div class="toolbar">
+      <button class="pill-btn" id="btnToTBM">이 작업을 TBM로 가져오기</button>
+    </div>
+    <div class="progress">
+      <div class="bar"><div class="bar-fill" id="barFill" style="width:0%"></div></div>
+      <div class="muted small" id="barText">0/0</div>
+    </div>
+    <div class="stack" id="hazCards"></div>
+  </section>
+</template>
+
+<!-- TBM EDITOR -->
+<template id="tpl-tbm">
+  <section class="panel">
+    <div class="bigcard">
+      <div class="row2">
+        <div>
+          <div class="muted small">오늘 날짜</div>
+          <div class="big" id="tbmToday">-</div>
+        </div>
+        <div class="right">
+          <div class="muted small">저장된 TBM</div>
+          <div class="big"><span id="tbmCount">0</span>건</div>
+        </div>
+      </div>
+      <div class="toolbar">
+        <button class="pill-btn" id="btnSave">저장</button>
+        <button class="pill-btn" id="btnCopy">이전 TBM 복사</button>
+        <button class="pill-btn primary" id="btnPrint">PDF 내보내기</button>
+      </div>
+    </div>
+
+    <div class="bigcard">
+      <div class="card-title">1) 기본정보</div>
+      <div class="grid2">
+        <div>
+          <label>작업명</label>
+          <input id="jobName" placeholder="예: 전주 세우기(건주) / 변압기 교체" />
+        </div>
+        <div>
+          <label>장소</label>
+          <input id="location" placeholder="예: ○○시 ○○로, ○○현장" />
+        </div>
+      </div>
+      <div class="grid2">
+        <div>
+          <label>일시</label>
+          <input id="datetime" type="datetime-local" />
+        </div>
+        <div>
+          <label>작업유형 템플릿</label>
+          <select id="template"><option value="">선택</option></select>
+        </div>
+      </div>
+      <label>작업내용(요약)</label>
+      <textarea id="workDesc" placeholder="오늘 작업 범위/순서/주요 장비/작업반경 등을 간단히"></textarea>
+    </div>
+
+    <div class="bigcard">
+      <div class="card-title">2) 위험요인/대책</div>
+      <div class="grid2">
+        <div>
+          <label>위험요인 선택</label>
+          <select id="hazardPick"><option value="">선택해서 추가</option></select>
+        </div>
+        <div>
+          <label>추가 위험요인(직접 입력)</label>
+          <input id="hazardCustom" placeholder="예: 민원 차량 통행, 협소 공간 등" />
+        </div>
+      </div>
+      <div class="toolbar">
+        <button class="pill-btn" id="btnAddHazard">위험요인 추가</button>
+        <button class="pill-btn" id="btnGenMeasures">대책 자동 생성</button>
+        <button class="pill-btn danger" id="btnClearHaz">초기화</button>
+      </div>
+      <label>선정된 위험요인</label>
+      <textarea id="hazards" readonly placeholder="위험요인 목록"></textarea>
+      <label>대책(Controls)</label>
+      <textarea id="measures" placeholder="자동 생성 후 현장에 맞게 수정"></textarea>
+      <div class="muted small">TIP: “단위작업 위험요인” 화면에서 작업을 선택하고 “TBM로 가져오기”를 누르면 자동으로 채워집니다.</div>
+    </div>
+
+    <div class="bigcard">
+      <div class="card-title">3) 체크리스트 (회의용)</div>
+      <div class="checklist" id="checklist"></div>
+    </div>
+
+    <div class="bigcard">
+      <div class="card-title">4) 참석자/서명/사진</div>
+      <div class="grid2">
+        <div>
+          <label>참석자(쉼표로 구분)</label>
+          <input id="attendees" placeholder="예: 홍길동, 김철수, 박영희" />
+        </div>
+        <div>
+          <label>비고</label>
+          <input id="memo" placeholder="예: 특이사항/민원/기상" />
+        </div>
+      </div>
+
+      <label>전자서명</label>
+      <div class="sigbox">
+        <canvas id="sig" aria-label="서명 캔버스"></canvas>
+        <div class="toolbar">
+          <button class="pill-btn" id="btnSigClear">서명 지우기</button>
+          <div class="muted small">손가락/마우스로 서명하세요.</div>
+        </div>
+      </div>
+
+      <label>사진 첨부(권장 1~3장)</label>
+      <input id="photos" type="file" accept="image/*" multiple />
+      <div class="thumbs" id="thumbs"></div>
+      <div class="muted small">※ 사진은 기기 로컬에 저장됩니다(기기 변경 시 사라질 수 있음)</div>
+    </div>
+
+    <div class="bigcard">
+      <div class="card-title">저장 목록</div>
+      <input id="search" placeholder="검색: 작업명/장소" />
+      <div class="list" id="savedList"></div>
+    </div>
+  </section>
+</template>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
