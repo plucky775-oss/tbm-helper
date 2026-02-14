@@ -166,6 +166,15 @@ function route(){
     return;
   }
 
+  if(r==='streetview'){
+    setTop('거리뷰(현장 확인)','위치기반 바로가기',{back:true,home:true});
+    const node = tpl('tpl-streetview');
+    mount(node);
+    initStreetView();
+    return;
+  }
+
+
   if(r==='emergency'){
     setTop('응급의료시설','위치기반 바로가기',{back:true,home:true});
     const node = tpl('tpl-emergency');
@@ -299,12 +308,17 @@ async function loadWeather(label, lat, lon){
   const alertWind = document.getElementById('alertWind');
 
   wxLoc.textContent = label;
+  if(label==='현재 위치'){
+    // 지역명 표시
+    reverseGeocode(lat, lon).then(name=>{ wxLoc.textContent = name; }).catch(()=>{});
+  }
   wxTime.textContent = '불러오는 중...';
 
   const wurl = new URL('https://api.open-meteo.com/v1/forecast');
   wurl.searchParams.set('latitude', lat);
   wurl.searchParams.set('longitude', lon);
   wurl.searchParams.set('current', 'temperature_2m,relative_humidity_2m,apparent_temperature,wind_speed_10m,weather_code');
+  wurl.searchParams.set('daily', 'weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max');
   wurl.searchParams.set('timezone', 'Asia/Seoul');
 
   const aurl = new URL('https://air-quality-api.open-meteo.com/v1/air-quality');
@@ -341,6 +355,10 @@ async function loadWeather(label, lat, lon){
 
   alertCold.hidden = !(feel <= -10);
   alertWind.hidden = !(wind >= 10);
+
+  // 주간 날씨 렌더
+  renderWeekly(w, document.getElementById('weeklyList'));
+
 }
 
 /* ---------- TBM editor ---------- */
@@ -833,4 +851,140 @@ async function fetchOverpassEmergency(lat, lon, statusEl, resultsEl){
   }catch(e){
     if(statusEl) statusEl.textContent = '검색에 실패했습니다(네트워크/제한). 아래 지도 검색을 사용하세요.';
   }
+}
+
+
+/* ---------- Reverse geocoding (OSM Nominatim, keyless) ---------- */
+async function reverseGeocode(lat, lon){
+  // Nominatim usage: add user-agent via fetch headers
+  const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}&accept-language=ko`;
+  try{
+    const res = await fetch(url, {headers:{'Accept':'application/json'}});
+    if(!res.ok) throw new Error('reverse failed');
+    const j = await res.json();
+    const a = j.address || {};
+    // pick best name
+    return a.city || a.town || a.village || a.county || a.state || j.name || '현재 위치';
+  }catch(e){
+    return '현재 위치';
+  }
+}
+
+
+/* ---------- Weekly forecast rendering ---------- */
+function renderWeekly(wjson, container){
+  if(!container) return;
+  container.innerHTML = '';
+  const d = wjson.daily;
+  if(!d || !d.time) {
+    container.innerHTML = '<div class="muted small">주간 예보를 불러오지 못했습니다.</div>';
+    return;
+  }
+  const times = d.time;
+  const tmax = d.temperature_2m_max || [];
+  const tmin = d.temperature_2m_min || [];
+  const wcode = d.weather_code || [];
+  const pop = d.precipitation_probability_max || [];
+  const daysKo = ['일','월','화','수','목','금','토'];
+
+  for(let i=0;i<Math.min(times.length, 7);i++){
+    const dt = new Date(times[i] + 'T00:00:00');
+    const day = daysKo[dt.getDay()];
+    const mm = String(dt.getMonth()+1).padStart(2,'0');
+    const dd = String(dt.getDate()).padStart(2,'0');
+    const icon = iconFrom(wcode[i]);
+    const hi = (tmax[i]!=null) ? Math.round(tmax[i]) : '-';
+    const lo = (tmin[i]!=null) ? Math.round(tmin[i]) : '-';
+    const p = (pop[i]!=null) ? `${Math.round(pop[i])}%` : '-';
+    const row = document.createElement('div');
+    row.className = 'wrow';
+    row.innerHTML = `
+      <div class="wleft">
+        <div class="wday">${day} ${mm}/${dd}</div>
+        <div class="wicon">${icon}</div>
+        <div class="wdesc">최저/최고</div>
+      </div>
+      <div class="wright">
+        <div class="whilo">${lo}° / ${hi}°</div>
+        <div class="wpop">${p}</div>
+      </div>
+    `;
+    container.appendChild(row);
+  }
+}
+
+
+/* ---------- Street View / Road View links ---------- */
+function initStreetView(){
+  const svLoc = document.getElementById('svLoc');
+  const svCoord = document.getElementById('svCoord');
+  const btn = document.getElementById('btnSvGetLoc');
+  const btnCopy = document.getElementById('btnSvCopy');
+  const links = document.getElementById('svLinks');
+
+  const fmt = (n)=> (Math.round(n*1000000)/1000000).toFixed(6);
+
+  const renderLinks = (lat, lon, placeName)=>{
+    links.innerHTML = '';
+    const googlePano = `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${lat},${lon}`;
+    const googleMap = `https://www.google.com/maps/search/?api=1&query=${lat},${lon}`;
+    const naverRoad = `https://m.map.naver.com/panorama/${lon},${lat}`; // may open roadview when available
+    const naverSearch = `https://m.map.naver.com/search2/search.naver?query=${encodeURIComponent(placeName||'현장')}&x=${lon}&y=${lat}`;
+    const kakaoRoad = `https://map.kakao.com/link/roadview/${lat},${lon}`; // opens roadview if available
+    const kakaoMap = `https://map.kakao.com/link/map/${encodeURIComponent(placeName||'현장')},${lat},${lon}`;
+
+    const make = (title, sub, href, icon)=>{
+      const a = document.createElement('a');
+      a.className = 'card nav';
+      a.target = '_blank';
+      a.rel = 'noopener';
+      a.href = href;
+      a.innerHTML = `
+        <div class="card-icon cloud">${icon}</div>
+        <div class="card-body">
+          <div class="card-title">${title}</div>
+          <div class="card-sub">${sub}</div>
+        </div>
+        <div class="card-arrow">›</div>
+      `;
+      return a;
+    };
+
+    links.appendChild(make('Google 거리뷰', 'Street View(가능 시) 바로 열기', googlePano, '👁️'));
+    links.appendChild(make('Google 지도', '현재 좌표 지도 보기', googleMap, '🗺️'));
+    links.appendChild(make('네이버 파노라마', '가능 시 로드뷰 열기', naverRoad, '🧭'));
+    links.appendChild(make('카카오 로드뷰', '가능 시 로드뷰 열기', kakaoRoad, '📍'));
+    links.appendChild(make('네이버 검색', '현장 주변 검색', naverSearch, '🔎'));
+    links.appendChild(make('카카오 지도', '현장 지도 보기', kakaoMap, '🗺️'));
+  };
+
+  const apply = async (lat, lon)=>{
+    const name = await reverseGeocode(lat, lon);
+    svLoc.textContent = name;
+    svCoord.textContent = `${fmt(lat)}, ${fmt(lon)}`;
+    renderLinks(lat, lon, name);
+  };
+
+  const getLoc = ()=>{
+    if(!navigator.geolocation){ alert('이 기기에서 위치 기능을 사용할 수 없습니다.'); return; }
+    svLoc.textContent = '위치 확인 중...';
+    navigator.geolocation.getCurrentPosition(
+      (pos)=>apply(pos.coords.latitude, pos.coords.longitude),
+      ()=>{ svLoc.textContent = '미확인'; alert('위치 권한이 필요합니다.'); },
+      { enableHighAccuracy:true, timeout:12000, maximumAge:300000 }
+    );
+  };
+
+  btn.onclick = getLoc;
+  btnCopy.onclick = async ()=>{
+    const txt = svCoord.textContent;
+    if(!txt || txt==='-'){ alert('먼저 위치를 가져오세요.'); return; }
+    try{ await navigator.clipboard.writeText(txt); alert('좌표를 복사했습니다.'); }
+    catch{
+      const ta=document.createElement('textarea'); ta.value=txt; document.body.appendChild(ta);
+      ta.select(); document.execCommand('copy'); ta.remove(); alert('좌표를 복사했습니다.');
+    }
+  };
+
+  setTimeout(getLoc, 200);
 }

@@ -75,6 +75,17 @@
     </a>
 
 
+    
+    <a class="card nav" href="#/streetview">
+      <div class="card-icon cloud">👁️</div>
+      <div class="card-body">
+        <div class="card-title">거리뷰(현장 확인)</div>
+        <div class="card-sub">현재 위치 주변 거리뷰/로드뷰 바로가기</div>
+      </div>
+      <div class="card-arrow">›</div>
+    </a>
+
+
     <a class="card nav" href="#/tasks">
       <div class="card-icon gear">⚙️</div>
       <div class="card-body">
@@ -144,6 +155,12 @@
       <div class="muted small">기준(권장): 좋음 0~30 · 보통 31~80 · 나쁨 81~150 · 매우나쁨 151+</div>
     </div>
   </section>
+
+    <div class="bigcard" id="weeklyCard">
+      <div class="card-title">주간 날씨</div>
+      <div class="weekly" id="weeklyList"></div>
+    </div>
+
 </template>
 
 <!-- TASK LIST -->
@@ -362,6 +379,43 @@
 
       <div class="muted small" style="margin-top:10px">
 TIP: 위치가 안 잡히면 iOS 설정 &gt; Safari &gt; 위치에서 “허용”으로 바꿔주세요.
+      </div>
+    </div>
+  </section>
+</template>
+
+
+<!-- STREETVIEW -->
+<template id="tpl-streetview">
+  <section class="panel">
+    <div class="desc">
+      현재 위치를 기반으로 <b>거리뷰/로드뷰</b>를 빠르게 엽니다.<br/>
+      <span class="muted small">※ 지도앱으로 연결됩니다(브라우저 내 임베드는 제한됨).</span>
+    </div>
+
+    <div class="bigcard">
+      <div class="row2">
+        <div>
+          <div class="muted small">현재 위치</div>
+          <div class="big" id="svLoc">미확인</div>
+        </div>
+        <div class="right">
+          <div class="muted small">좌표</div>
+          <div class="big" id="svCoord">-</div>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <button class="pill-btn primary" id="btnSvGetLoc">위치 가져오기</button>
+        <button class="pill-btn" id="btnSvCopy">좌표 복사</button>
+      </div>
+
+      <div class="hr"></div>
+
+      <div class="stack" id="svLinks"></div>
+
+      <div class="muted small" style="margin-top:10px">
+        TIP: 현장 주소가 필요하면 “날씨·미세먼지” 화면에서 현재 위치를 눌러 지역명을 확인하세요.
       </div>
     </div>
   </section>

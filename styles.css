@@ -155,3 +155,14 @@ canvas{width:100%;height:160px;display:block;border-radius:12px;background:#fff;
 }
 .mini-btn.primary{background:var(--green);border-color:var(--green);color:#fff}
 .mini-btn.danger{border-color:#fecaca;color:#b91c1c}
+
+.weekly{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.wrow{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  border:1px solid var(--stroke);border-radius:14px;padding:10px 12px;background:#f8fafc}
+.wleft{display:flex;align-items:center;gap:10px;min-width:0}
+.wday{font-weight:1100;min-width:56px}
+.wicon{font-size:18px}
+.wdesc{color:var(--muted);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wright{display:flex;align-items:center;gap:10px;font-weight:1100}
+.whilo{white-space:nowrap}
+.wpop{color:#2563eb;font-weight:1100;white-space:nowrap}
