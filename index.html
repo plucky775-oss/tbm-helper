@@ -64,6 +64,17 @@
       <div class="card-arrow">›</div>
     </a>
 
+    
+    <a class="card nav" href="#/emergency">
+      <div class="card-icon folder">🏥</div>
+      <div class="card-body">
+        <div class="card-title">응급의료시설(위치기반)</div>
+        <div class="card-sub">현재 위치 기준 응급실/응급의료기관 검색 바로가기</div>
+      </div>
+      <div class="card-arrow">›</div>
+    </a>
+
+
     <a class="card nav" href="#/tasks">
       <div class="card-icon gear">⚙️</div>
       <div class="card-body">
@@ -265,6 +276,93 @@
       <div class="card-title">저장 목록</div>
       <input id="search" placeholder="검색: 작업명/장소" />
       <div class="list" id="savedList"></div>
+    </div>
+  </section>
+</template>
+
+
+<!-- EMERGENCY -->
+<template id="tpl-emergency">
+  <section class="panel">
+    <div class="desc">
+      현재 위치를 사용해 주변 <b>응급실/응급의료기관</b>을 빠르게 찾습니다.<br/>
+      <span class="muted small">※ 이 기능은 지도앱(네이버/카카오/구글)으로 검색을 연결합니다.</span>
+    </div>
+
+    <div class="bigcard">
+      <div class="row2">
+        <div>
+          <div class="muted small">현재 위치</div>
+          <div class="big" id="emgLoc">미확인</div>
+        </div>
+        <div class="right">
+          <div class="muted small">좌표</div>
+          <div class="big" id="emgCoord">-</div>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <button class="pill-btn primary" id="btnGetLoc">위치 가져오기</button>
+        <a class="pill-btn" id="btnCall119" href="tel:119">119 전화</a>
+        <button class="pill-btn" id="btnCopyCoord">좌표 복사</button>
+      </div>
+
+      <div class="hr"></div>
+
+      <div class="grid2">
+        <a class="card nav" id="linkGoogle" target="_blank" rel="noopener">
+          <div class="card-icon cloud">🗺️</div>
+          <div class="card-body">
+            <div class="card-title">Google 지도</div>
+            <div class="card-sub">주변 “응급실” 검색</div>
+          </div>
+          <div class="card-arrow">›</div>
+        </a>
+
+        <a class="card nav" id="linkNaver" target="_blank" rel="noopener">
+          <div class="card-icon cloud">🧭</div>
+          <div class="card-body">
+            <div class="card-title">네이버 지도</div>
+            <div class="card-sub">주변 “응급실” 검색</div>
+          </div>
+          <div class="card-arrow">›</div>
+        </a>
+      </div>
+
+      <div class="grid2">
+        <a class="card nav" id="linkKakao" target="_blank" rel="noopener">
+          <div class="card-icon cloud">📍</div>
+          <div class="card-body">
+            <div class="card-title">카카오맵</div>
+            <div class="card-sub">“응급실” 검색</div>
+          </div>
+          <div class="card-arrow">›</div>
+        </a>
+
+        <a class="card nav" id="linkEgen" target="_blank" rel="noopener">
+          <div class="card-icon cloud">🚑</div>
+          <div class="card-body">
+            <div class="card-title">응급의료포털(E-GEN)</div>
+            <div class="card-sub">응급의료기관 찾기</div>
+          </div>
+          <div class="card-arrow">›</div>
+        </a>
+      </div>
+
+      <div class="muted small" style="margin-top:10px">
+        
+      <div class="hr"></div>
+      <div class="card-title">가까운 응급의료시설</div>
+      <div class="muted small" id="emgStatus">위치 확인 후 주변 시설을 불러옵니다.</div>
+      <div class="stack" id="emgResults" style="margin-top:10px"></div>
+
+      <div class="muted small" style="margin-top:10px">
+        ※ 결과는 OpenStreetMap(Overpass) 기반이며 실제 운영 여부는 전화로 확인하세요.
+      </div>
+
+      <div class="muted small" style="margin-top:10px">
+TIP: 위치가 안 잡히면 iOS 설정 &gt; Safari &gt; 위치에서 “허용”으로 바꿔주세요.
+      </div>
     </div>
   </section>
 </template>

@@ -166,6 +166,15 @@ function route(){
     return;
   }
 
+  if(r==='emergency'){
+    setTop('응급의료시설','위치기반 바로가기',{back:true,home:true});
+    const node = tpl('tpl-emergency');
+    mount(node);
+    initEmergency();
+    return;
+  }
+
+
   if(r==='tasks' && !a){
     setTop('단위작업 위험요인','Task Level',{back:true,home:true});
     const node = tpl('tpl-tasklist');
@@ -635,4 +644,193 @@ function initTBMEditor(mode, id){
 
 function escapeHtml(s){
   return String(s).replace(/[&<>"']/g, m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[m]));
+}
+
+
+/* ---------- Emergency facilities (maps deep links) ---------- */
+function initEmergency(){
+  const emgLoc = document.getElementById('emgLoc');
+  const emgCoord = document.getElementById('emgCoord');
+  const btnGetLoc = document.getElementById('btnGetLoc');
+  const btnCopy = document.getElementById('btnCopyCoord');
+  const emgStatus = document.getElementById('emgStatus');
+  const emgResults = document.getElementById('emgResults');
+
+  const linkGoogle = document.getElementById('linkGoogle');
+  const linkNaver = document.getElementById('linkNaver');
+  const linkKakao = document.getElementById('linkKakao');
+  const linkEgen = document.getElementById('linkEgen');
+
+  // Defaults (no coord): generic search
+  linkGoogle.href = 'https://www.google.com/maps/search/%EC%9D%91%EA%B8%89%EC%8B%A4';
+  linkNaver.href = 'https://m.map.naver.com/search2/search.naver?query=%EC%9D%91%EA%B8%89%EC%8B%A4';
+  linkKakao.href = 'https://m.map.kakao.com/actions/searchView?q=%EC%9D%91%EA%B8%89%EC%8B%A4';
+  linkEgen.href = 'https://www.e-gen.or.kr/egen/search.do';
+
+  const setLinks = (lat, lon)=>{
+    const z = 14;
+    linkGoogle.href = `https://www.google.com/maps/search/%EC%9D%91%EA%B8%89%EC%8B%A4/@${lat},${lon},${z}z`;
+    // Naver mobile map supports x(lon), y(lat) params in many cases
+    linkNaver.href = `https://m.map.naver.com/search2/search.naver?query=%EC%9D%91%EA%B8%89%EC%8B%A4&sm=hty&style=v5&x=${lon}&y=${lat}`;
+    // Kakao doesn't reliably take coords for search; still provide query
+    linkKakao.href = `https://m.map.kakao.com/actions/searchView?q=%EC%9D%91%EA%B8%89%EC%8B%A4`;
+    // E-GEN general entry (user can search)
+    linkEgen.href = 'https://www.e-gen.or.kr/egen/search.do';
+  };
+
+  const fmt = (n)=> (Math.round(n*1000000)/1000000).toFixed(6);
+
+  const apply = (lat, lon)=>{
+    emgLoc.textContent = '현재 위치';
+    emgCoord.textContent = `${fmt(lat)}, ${fmt(lon)}`;
+    setLinks(lat, lon);
+    fetchOverpassEmergency(lat, lon, emgStatus, emgResults);
+  };
+
+  const getLoc = ()=>{
+    if(!navigator.geolocation){
+      alert('이 기기에서 위치 기능을 사용할 수 없습니다.');
+      return;
+    }
+    emgLoc.textContent = '위치 확인 중...';
+    navigator.geolocation.getCurrentPosition(
+      (pos)=>apply(pos.coords.latitude, pos.coords.longitude),
+      (err)=>{
+        emgLoc.textContent = '미확인';
+        if(emgStatus) emgStatus.textContent = '위치 권한이 필요합니다.';
+        if(emgResults) emgResults.innerHTML = '';
+        alert('위치 권한이 필요합니다. iOS 설정 > Safari > 위치에서 허용해주세요.');
+      },
+      { enableHighAccuracy:true, timeout:12000, maximumAge: 300000 }
+    );
+  };
+
+  btnGetLoc.onclick = getLoc;
+  btnCopy.onclick = async ()=>{
+    const txt = emgCoord.textContent;
+    if(!txt || txt==='-'){ alert('먼저 위치를 가져오세요.'); return; }
+    try{
+      await navigator.clipboard.writeText(txt);
+      alert('좌표를 복사했습니다.');
+    }catch{
+      // fallback
+      const ta = document.createElement('textarea');
+      ta.value = txt;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      ta.remove();
+      alert('좌표를 복사했습니다.');
+    }
+  };
+
+  // auto try once
+  setTimeout(getLoc, 200);
+}
+
+
+/* ---------- Overpass: nearest emergency facilities (keyless) ---------- */
+function haversineKm(lat1, lon1, lat2, lon2){
+  const R = 6371;
+  const toRad = (d)=>d*Math.PI/180;
+  const dLat = toRad(lat2-lat1);
+  const dLon = toRad(lon2-lon1);
+  const a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLon/2)**2;
+  return 2*R*Math.asin(Math.sqrt(a));
+}
+
+async function fetchOverpassEmergency(lat, lon, statusEl, resultsEl){
+  if(statusEl) statusEl.textContent = '주변 응급의료시설 검색 중...';
+  if(resultsEl) resultsEl.innerHTML = '';
+
+  // Overpass QL: hospitals + emergency
+  const radius = 8000; // 8km
+  const query = `
+  [out:json][timeout:25];
+  (
+    node(around:${radius},${lat},${lon})["amenity"="hospital"];
+    way(around:${radius},${lat},${lon})["amenity"="hospital"];
+    relation(around:${radius},${lat},${lon})["amenity"="hospital"];
+
+    node(around:${radius},${lat},${lon})["emergency"="yes"];
+    way(around:${radius},${lat},${lon})["emergency"="yes"];
+    relation(around:${radius},${lat},${lon})["emergency"="yes"];
+
+    node(around:${radius},${lat},${lon})["healthcare"="hospital"];
+    way(around:${radius},${lat},${lon})["healthcare"="hospital"];
+    relation(around:${radius},${lat},${lon})["healthcare"="hospital"];
+  );
+  out center tags;
+  `;
+
+  try{
+    const res = await fetch('https://overpass-api.de/api/interpreter', {
+      method:'POST',
+      headers:{'Content-Type':'text/plain;charset=UTF-8'},
+      body: query
+    });
+    if(!res.ok) throw new Error('Overpass error');
+    const data = await res.json();
+
+    const items = (data.elements||[]).map(el=>{
+      const t = el.tags || {};
+      const name = t.name || t['name:ko'] || t.operator || '의료시설';
+      const phone = t.phone || t['contact:phone'] || t['phone:mobile'] || '';
+      const addr = t['addr:full'] || [t['addr:city'], t['addr:district'], t['addr:street'], t['addr:housenumber']].filter(Boolean).join(' ') || '';
+      const lat2 = el.lat ?? el.center?.lat;
+      const lon2 = el.lon ?? el.center?.lon;
+      const dist = (lat2!=null && lon2!=null) ? haversineKm(lat, lon, lat2, lon2) : 9999;
+      return {name, phone, addr, lat:lat2, lon:lon2, dist};
+    }).filter(x=>x.lat!=null && x.lon!=null);
+
+    // Deduplicate by name+coords
+    const seen = new Set();
+    const uniq = [];
+    for(const it of items){
+      const key = `${it.name}|${it.lat.toFixed(5)}|${it.lon.toFixed(5)}`;
+      if(seen.has(key)) continue;
+      seen.add(key);
+      uniq.push(it);
+    }
+
+    uniq.sort((a,b)=>a.dist-b.dist);
+
+    const top = uniq.slice(0, 7);
+    if(!top.length){
+      if(statusEl) statusEl.textContent = '주변에서 시설을 찾지 못했습니다. 아래 지도 검색을 사용하세요.';
+      return;
+    }
+
+    if(statusEl) statusEl.textContent = `가까운 순서로 ${top.length}개 표시 (반경 ${radius/1000}km)`;
+
+    if(resultsEl){
+      top.forEach(it=>{
+        const card = document.createElement('div');
+        card.className = 'hcard';
+        const distText = it.dist < 1 ? `${Math.round(it.dist*1000)}m` : `${it.dist.toFixed(1)}km`;
+        const safePhone = (it.phone||'').replace(/\s+/g,'');
+        const gdir = `https://www.google.com/maps/dir/?api=1&destination=${it.lat},${it.lon}`;
+        const gview = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(it.name)}&query_place_id=`;
+        card.innerHTML = `
+          <div class="hhead">
+            <div class="hicon">🏥</div>
+            <div style="flex:1;min-width:0">
+              <div class="htitle">${escapeHtml(it.name)} <span class="muted small">· ${distText}</span></div>
+              <div class="muted small" style="margin-top:4px">${escapeHtml(it.addr||'주소 정보 없음')}</div>
+              ${safePhone ? `<div class="muted small" style="margin-top:4px">☎ ${escapeHtml(it.phone)}</div>` : ``}
+            </div>
+          </div>
+          <div class="mini-row">
+            <a class="mini-btn primary" href="${gdir}" target="_blank" rel="noopener">길찾기</a>
+            ${safePhone ? `<a class="mini-btn" href="tel:${safePhone}">전화</a>` : `<span class="mini-btn danger">전화정보 없음</span>`}
+            <a class="mini-btn" href="https://m.map.naver.com/search2/search.naver?query=${encodeURIComponent(it.name)}" target="_blank" rel="noopener">네이버</a>
+            <a class="mini-btn" href="https://m.map.kakao.com/actions/searchView?q=${encodeURIComponent(it.name)}" target="_blank" rel="noopener">카카오</a>
+          </div>
+        `;
+        resultsEl.appendChild(card);
+      });
+    }
+  }catch(e){
+    if(statusEl) statusEl.textContent = '검색에 실패했습니다(네트워크/제한). 아래 지도 검색을 사용하세요.';
+  }
 }
