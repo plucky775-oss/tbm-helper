@@ -988,3 +988,52 @@ function initStreetView(){
 
   setTimeout(getLoc, 200);
 }
+
+// --- 응급의료시설(공공데이터포털/응급실 실시간 가용정보) ---
+// ⚠️ GitHub Pages에서는 serviceKey를 프론트에 넣으면 공개됩니다.
+// 따라서 Cloudflare Worker(또는 서버리스 프록시)에 SERVICE_KEY를 저장하고,
+// 여기서는 Worker URL만 호출하세요.
+async function loadEmergencyFacilities() {
+  const ul = document.getElementById("emergencyList");
+  if (!ul) return;
+
+  ul.innerHTML = "불러오는 중...";
+
+  // ✅ 여기를 주인님 Worker 배포 URL로 교체하세요 (키는 Worker에만!)
+  // 예: https://xxxxxx.workers.dev/?STAGE1=경기도&STAGE2=안산시&numOfRows=200
+  const proxyUrl = "https://YOUR-WORKER.workers.dev/?STAGE1=경기도&STAGE2=안산시&numOfRows=200";
+
+  try {
+    const res = await fetch(proxyUrl, { cache: "no-store" });
+    if (!res.ok) throw new Error("API 응답 오류: " + res.status);
+    const data = await res.json();
+
+    const items = data?.response?.body?.items?.item || [];
+
+    // ✅ 응급실 병상(hvec) 보유(>0)만 최대 7개
+    const filtered = items
+      .filter(it => Number(it?.hvec || 0) > 0)
+      .slice(0, 7);
+
+    ul.innerHTML = "";
+
+    if (filtered.length === 0) {
+      ul.innerHTML = "<li>표시할 응급의료시설이 없습니다.</li>";
+      return;
+    }
+
+    filtered.forEach(it => {
+      const name = it?.dutyname || "응급의료기관";
+      const addr = it?.dutyaddr || "";
+      const tel = it?.dutytel3 ? ` / ${it.dutytel3}` : "";
+      const li = document.createElement("li");
+      li.innerHTML = `<strong>${name}</strong>${tel}<br>${addr}`;
+      ul.appendChild(li);
+    });
+  } catch (e) {
+    ul.innerHTML = `<li>응급의료시설을 불러오지 못했습니다. (프록시 URL 확인 필요)</li>`;
+    console.error(e);
+  }
+}
+
+document.addEventListener("DOMContentLoaded", loadEmergencyFacilities);
