@@ -440,362 +440,229 @@ canvas{width:100%;height:160px;display:block;border-radius:12px;background:#fff;
 .contact-name {
   white-space: nowrap;
 }
-/* =========================================================
-   Apple-like (iOS) theme overrides
-   - Clean, bright, soft separators
-   - Translucent (blur) top bar
-   - iOS blue accents + dark mode support
-   Added: 2026-02-19
-   ========================================================= */
-:root{
-  --brand:#007AFF;
-  --brand-rgb:0,122,255;
-  --accent:#FF9500;
 
-  /* semantic colors (iOS-ish) */
+
+
+/* =========================
+   Apple-Pro Premium Theme (v202602192114)
+   - Preserves existing markup/classes
+   - Focus: iOS grouped surfaces, translucent topbar, refined cards, typography, motion
+   ========================= */
+
+:root{
+  --brand:#0A84FF;                 /* iOS system blue */
+  --brand-rgb:10,132,255;
+  --accent:#FF9F0A;                /* iOS orange */
   --green:#34C759;
   --danger:#FF3B30;
-  --warn:#FF9500;
+  --warn:#FF9F0A;
 
-  /* surfaces */
-  --bg:#F2F2F7;      /* iOS grouped background */
+  --bg:#F2F2F7;                    /* iOS grouped background */
   --card:#FFFFFF;
-  --stroke:#E5E5EA;  /* iOS separator */
-  --text:#1C1C1E;
-  --muted:#6E6E73;
+  --stroke:rgba(60,60,67,.18);     /* iOS separator (light) */
 
-  /* subtle depth */
-  --shadow:0 1px 2px rgba(0,0,0,.06);
+  --text:#0B0B0F;
+  --muted:rgba(60,60,67,.72);
+
+  --shadow: 0 8px 24px rgba(0,0,0,.06);
+  --shadow2: 0 2px 6px rgba(0,0,0,.06);
+  --radius: 18px;
 }
 
-body{
-  background:var(--bg);
-  -webkit-font-smoothing:antialiased;
-  text-rendering:optimizeLegibility;
-}
-
-a,button{
-  -webkit-tap-highlight-color: rgba(0,0,0,0);
-}
-
-/* --- Navigation / Top bar --- */
-.topbar{
-  background: rgba(255,255,255,.82);
+html{ -webkit-text-size-adjust:100%; }
+body.apple-pro{
+  background: var(--bg);
   color: var(--text);
-  box-shadow:none;
-  border-bottom:1px solid rgba(229,229,234,.92);
-
-  backdrop-filter:saturate(180%) blur(20px);
-  -webkit-backdrop-filter:saturate(180%) blur(20px);
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+               "Apple SD Gothic Neo", "Noto Sans KR", "Segoe UI", Roboto, sans-serif;
+  letter-spacing: -0.15px;
 }
 
-.topbar-title .title{
-  font-weight:800;
-  letter-spacing:-.2px;
-}
+.container{ padding: 14px 12px 56px; } /* a bit more breathing room */
 
-.topbar-title .subtitle{
-  color:var(--muted);
-  opacity:1;
+/* ---- Topbar: translucent + blur, iOS-like ---- */
+.topbar{
+  background: rgba(242,242,247,.76) !important;
+  color: var(--text) !important;
+  border-bottom: 1px solid rgba(60,60,67,.18);
+  box-shadow: none !important;
+  -webkit-backdrop-filter: saturate(180%) blur(18px);
+  backdrop-filter: saturate(180%) blur(18px);
 }
+.topbar-title .title{ color: var(--text); font-weight: 900; font-size: 22px; }
+.topbar-title .subtitle{ color: rgba(60,60,67,.72); opacity: 1; font-weight: 800; }
 
-/* --- Buttons --- */
+/* Icon buttons: compact, glassy */
 .icon-btn{
-  width:44px;
-  height:44px;
-  border-radius:12px;
-  border:1px solid rgba(229,229,234,.92);
-  background: rgba(255,255,255,.92);
+  width: 44px; height: 44px;
+  border-radius: 14px;
+  border: 1px solid rgba(60,60,67,.18);
+  background: rgba(255,255,255,.88);
   color: var(--brand);
-  font-weight:800;
-  font-size:22px;
-  line-height:1;
-  display:grid;
-  place-items:center;
-  cursor:pointer;
-  box-shadow:0 10px 26px rgba(0,0,0,.10);
-  transform:none;
+  box-shadow: var(--shadow2);
+  transform: none !important;
 }
-.icon-btn:active{
-  transform:scale(.97);
-  box-shadow:0 6px 16px rgba(0,0,0,.10);
-}
+.icon-btn:active{ transform: scale(.97) !important; box-shadow: 0 1px 3px rgba(0,0,0,.10) !important; }
 
+/* Pills -> iOS filled/tonal */
 .pill-btn{
-  border:1px solid rgba(var(--brand-rgb),.18);
-  background: rgba(var(--brand-rgb),.12);
-  color: var(--brand);
-  border-radius:999px;
-  padding:9px 12px;
-  font-weight:800;
-  cursor:pointer;
+  border: 1px solid rgba(60,60,67,.18);
+  background: rgba(255,255,255,.88);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 10px 14px;
+  font-weight: 900;
+  -webkit-backdrop-filter: saturate(180%) blur(10px);
+  backdrop-filter: saturate(180%) blur(10px);
 }
 .pill-btn.primary{
   background: var(--brand);
-  border-color: var(--brand);
-  color:#fff;
+  border-color: rgba(var(--brand-rgb), .45);
+  color: #fff;
 }
 .pill-btn.danger{
-  border:1px solid rgba(255,59,48,.22);
   background: rgba(255,59,48,.12);
-  color:#ff3b30;
-}
-
-/* Toolbar buttons (keep consistent with iOS look) */
-.toolbar .pill-btn{
-  border-color: rgba(209,209,214,1);
-  background: rgba(255,255,255,.88);
-  color: var(--text);
-}
-.toolbar .pill-btn.primary{
-  background: var(--brand);
-  border-color: var(--brand);
-  color:#fff;
-}
-.toolbar .pill-btn.danger{
   border-color: rgba(255,59,48,.22);
-  background: rgba(255,59,48,.12);
-  color:#ff3b30;
+  color: #B42318;
 }
 
-/* Mini buttons (used in video/links) */
-.mini-btn{
-  border-color: rgba(209,209,214,1);
-  background: rgba(255,255,255,.88);
-  color: var(--text);
-  border-radius:14px;
+/* ---- Cards: grouped iOS feel ---- */
+.list{ gap: 12px; }
+.card, .bigcard, .desc, .rule, .hcard, .citem, .wrow, .sigbox, .wx-warn, .wx-warn-item{
+  border-radius: var(--radius) !important;
 }
-.mini-btn.primary{
-  background: var(--brand);
-  border-color: var(--brand);
-  color:#fff;
-}
-.mini-btn.danger{
-  border-color: rgba(255,59,48,.22);
-  background: rgba(255,59,48,.12);
-  color:#ff3b30;
-}
-
-
-/* --- Layout spacing --- */
-.container{padding:14px 12px 54px}
-
-/* --- Cards / panels --- */
-.card,
-.bigcard,
-.desc,
-.rule,
-.citem,
-.hcard,
-.wx-warn,
-.wx-warn-item,
-.kpi,
-.aq-box,
-.wrow,
-.sigbox{
-  border-radius:16px;
-  border-color: rgba(229,229,234,.92);
-}
-
 .card{
-  box-shadow:0 14px 34px rgba(0,0,0,.06);
+  border: 1px solid rgba(60,60,67,.16) !important;
+  box-shadow: var(--shadow);
+  padding: 14px 14px;
+  background: rgba(255,255,255,.92);
+  -webkit-backdrop-filter: blur(0px);
 }
+.card:active{ transform: scale(.995); box-shadow: 0 6px 18px rgba(0,0,0,.08); }
+.card-title{ font-weight: 950; letter-spacing: -0.25px; }
+.card-sub{ font-size: 12.5px; line-height: 1.35; color: var(--muted); }
+.card-arrow{ color: rgba(60,60,67,.45); font-size: 22px; }
 
-.bigcard{
-  box-shadow:0 14px 34px rgba(0,0,0,.06);
+.bigcard, .desc{
+  border: 1px solid rgba(60,60,67,.16) !important;
+  background: rgba(255,255,255,.92);
+  box-shadow: var(--shadow);
 }
+.desc{ color: rgba(60,60,67,.80); }
 
-.card-title{font-weight:800}
-.card-arrow{color:#C7C7CC}
-
-/* icon chips */
+/* Card icons: consistent “soft blob” */
 .card-icon{
-  border:1px solid rgba(0,0,0,.04);
-  background: rgba(242,242,247,.75);
+  width: 46px; height: 46px;
+  border-radius: 16px;
+  border: 1px solid rgba(60,60,67,.12);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.75);
 }
+.card-icon.shield{ background: rgba(10,132,255,.10); }
+.card-icon.folder{ background: rgba(52,199,89,.10); }
+.card-icon.ok{ background: rgba(255,159,10,.12); }
+.card-icon.cloud{ background: rgba(175,82,222,.10); }
+.card-icon.gear{ background: rgba(0,122,255,.10); }
 
-/* Inputs */
+/* ---- Inputs: iOS fields ---- */
 input,select,textarea{
-  border:1px solid rgba(209,209,214,1);
-  border-radius:14px;
-  padding:11px 12px;
+  border: 1px solid rgba(60,60,67,.18) !important;
+  border-radius: 14px !important;
+  padding: 12px 12px;
+  background: rgba(255,255,255,.92) !important;
 }
 input:focus,select:focus,textarea:focus{
-  outline:none;
-  border-color: rgba(var(--brand-rgb),.55);
-  box-shadow:0 0 0 4px rgba(var(--brand-rgb),.16);
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(var(--brand-rgb), .16);
+  border-color: rgba(var(--brand-rgb), .55) !important;
 }
 
-/* Segmented control (iOS-ish) */
+/* ---- Segmented control ---- */
 .seg{
-  gap:0;
-  padding:4px;
-  border-radius:14px;
-  background: rgba(118,118,128,.12);
+  background: rgba(255,255,255,.76);
+  border: 1px solid rgba(60,60,67,.16);
+  border-radius: 16px;
+  padding: 4px;
+  box-shadow: var(--shadow2);
 }
 .seg-btn{
-  border:0;
+  border: 0 !important;
+  border-radius: 12px;
   background: transparent;
-  padding:10px 12px;
-  border-radius:12px;
-  font-weight:800;
-  color: var(--muted);
+  padding: 10px 12px;
+  color: rgba(60,60,67,.80);
 }
 .seg-btn.active{
-  border:0;
-  background:#fff;
+  background: rgba(255,255,255,.98);
   color: var(--text);
-  box-shadow:0 10px 24px rgba(0,0,0,.10);
+  box-shadow: 0 6px 18px rgba(0,0,0,.06);
 }
 
-/* Alerts */
-.alert{border-radius:14px;font-weight:800}
-.alert.warn{
-  background: rgba(255,149,0,.12);
-  border-color: rgba(255,149,0,.20);
-  color:#9a5b00;
-}
-.alert.danger{
-  background: rgba(255,59,48,.10);
-  border-color: rgba(255,59,48,.18);
-  color:#b42318;
-}
-
-/* Home widgets */
-.home-clock{
-  border-radius:22px;
-  border:1px solid rgba(229,229,234,.92);
-  background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.78));
-  box-shadow:0 18px 42px rgba(0,0,0,.08);
-}
-.home-clock:before{display:none}
-.home-chip{
-  background: rgba(255,255,255,.88);
-  border:1px solid rgba(229,229,234,.92);
-  box-shadow:0 1px 2px rgba(0,0,0,.05);
-}
-.home-alerts{
-  border-radius:22px;
-  border:1px solid rgba(229,229,234,.92);
+/* ---- Alerts: iOS banners ---- */
+.alert{
+  border: 1px solid rgba(60,60,67,.16);
   background: rgba(255,255,255,.92);
-  box-shadow:0 18px 42px rgba(0,0,0,.08);
+}
+.alert.warn{ background: rgba(255,159,10,.10); border-color: rgba(255,159,10,.20); color:#8A5A00; }
+.alert.danger{ background: rgba(255,59,48,.10); border-color: rgba(255,59,48,.20); color:#8A1F19; }
+
+/* ---- Rules list: more “system” ---- */
+.rule-badge{
+  background: rgba(255,255,255,.96);
+  border: 1px solid rgba(60,60,67,.16);
+  width: 30px; height: 30px; border-radius: 12px;
+}
+.rule-title{ letter-spacing: -0.2px; }
+.rule-sub{ color: var(--muted); }
+
+/* ---- Weather cards: refined ---- */
+.kpi{ background: rgba(242,242,247,.60); border: 1px solid rgba(60,60,67,.14); }
+.aq-box{ border: 1px solid rgba(60,60,67,.14); }
+.weekly .wrow{ background: rgba(242,242,247,.55); }
+
+/* ---- Home clock widget: iOS widget look ---- */
+.home-clock{
+  background: radial-gradient(1200px 420px at 20% 10%, rgba(var(--brand-rgb), .18), rgba(255,255,255,0) 55%),
+              linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.88));
+  border: 1px solid rgba(var(--brand-rgb), .18) !important;
+  box-shadow: var(--shadow);
+}
+.home-clock-time{ color: var(--text); }
+.home-chip{ border: 1px solid rgba(60,60,67,.14); }
+
+/* ---- Mini buttons ---- */
+.mini-btn{
+  border-radius: 14px;
+  border: 1px solid rgba(60,60,67,.18);
+  background: rgba(255,255,255,.92);
+}
+.mini-btn.primary{ background: var(--brand); border-color: rgba(var(--brand-rgb), .45); color:#fff; }
+
+/* ---- Print stays usable ---- */
+@media print{
+  .topbar{ display:none !important; }
 }
 
-/* Weather tiles: soften */
-.kpi{background: rgba(242,242,247,.55)}
-.aq-box{background:#fff}
+/* Subtle motion */
+@media (prefers-reduced-motion: no-preference){
+  .card, .pill-btn, .icon-btn, .seg-btn, .mini-btn{ transition: transform .12s ease, box-shadow .18s ease, background .18s ease, border-color .18s ease; }
+}
 
-/* Dark mode (iOS style) */
+/* Dark mode: iOS-like */
 @media (prefers-color-scheme: dark){
-  :root{
-    --brand:#0A84FF;
-    --brand-rgb:10,132,255;
-
+  body.apple-pro{
     --bg:#000000;
     --card:#1C1C1E;
-    --stroke:#2C2C2E;
-    --text:#F2F2F7;
-    --muted:#A1A1AA;
-    --shadow:0 1px 2px rgba(0,0,0,.40);
+    --stroke:rgba(84,84,88,.65);
+    --text:#FFFFFF;
+    --muted:rgba(235,235,245,.65);
+    --shadow: 0 10px 30px rgba(0,0,0,.45);
+    --shadow2: 0 2px 10px rgba(0,0,0,.35);
   }
-
-  body{background:var(--bg);color:var(--text)}
-
   .topbar{
-    background: rgba(28,28,30,.78);
-    color: var(--text);
-    border-bottom:1px solid rgba(44,44,46,.92);
+    background: rgba(28,28,30,.72) !important;
+    border-bottom: 1px solid rgba(84,84,88,.45);
   }
-  .topbar-title .subtitle{color:var(--muted)}
-
-  .icon-btn{
-    background: rgba(44,44,46,.86);
-    border-color: rgba(84,84,88,.60);
-    box-shadow:none;
-  }
-
-  .pill-btn{
-    background: rgba(var(--brand-rgb),.18);
-    border-color: rgba(var(--brand-rgb),.26);
-    color: var(--brand);
-  }
-  .pill-btn.primary{color:#fff}
-  .pill-btn.danger{
-    background: rgba(255,59,48,.16);
-    border-color: rgba(255,59,48,.24);
-    color:#ff453a;
-  }
-
-  .toolbar .pill-btn,
-  .mini-btn{
-    background: rgba(44,44,46,.96);
-    border-color: rgba(84,84,88,.60);
-    color: var(--text);
-  }
-  .toolbar .pill-btn.primary,
-  .mini-btn.primary{
-    background: var(--brand);
-    border-color: var(--brand);
-    color:#fff;
-  }
-  .toolbar .pill-btn.danger,
-  .mini-btn.danger{
-    background: rgba(255,59,48,.16);
-    border-color: rgba(255,59,48,.24);
-    color:#ff453a;
-  }
-
-
-  .card,
-  .bigcard,
-  .desc,
-  .rule,
-  .citem,
-  .hcard,
-  .wx-warn,
-  .wx-warn-item,
-  .kpi,
-  .aq-box,
-  .wrow,
-  .sigbox{
-    background: var(--card);
-    border-color: rgba(44,44,46,.92);
-    box-shadow:none;
-  }
-
-  .card-sub,
-  .muted{color:var(--muted)}
-
-  .card-arrow{color: rgba(235,235,245,.30)}
-
-  input,select,textarea{
-    background: rgba(44,44,46,.96);
-    border-color: rgba(84,84,88,.60);
-    color: var(--text);
-  }
-
-  .seg{background: rgba(118,118,128,.24)}
-  .seg-btn{color: var(--muted)}
-  .seg-btn.active{
-    background: rgba(44,44,46,.96);
-    color: var(--text);
-    box-shadow:none;
-  }
-
-  .home-clock{
-    background: linear-gradient(180deg, rgba(28,28,30,.92), rgba(28,28,30,.78));
-  }
-  .home-chip{
-    background: rgba(44,44,46,.78);
-    border-color: rgba(84,84,88,.52);
-    color: var(--text);
-  }
-  .home-alerts{
-    background: rgba(28,28,30,.92);
-    border-color: rgba(44,44,46,.92);
-  }
-
-  .kpi{background: rgba(44,44,46,.55)}
-  .aq-box{background: rgba(44,44,46,.55)}
-  .wrow{background: rgba(44,44,46,.55)}
+  .card, .bigcard, .desc, input, select, textarea, .seg, .mini-btn{ background: rgba(28,28,30,.88) !important; }
+  .seg-btn.active{ background: rgba(44,44,46,.96); }
+  .kpi, .wrow{ background: rgba(44,44,46,.70); }
 }
