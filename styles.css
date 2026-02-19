@@ -1,442 +1,201 @@
-/* 통합형 TBM도우미 - 카드형 UI + TBM 작성/지식 통합 */
-:root{
-  --brand:#3B6885;
-  --brand-rgb:59,104,133;
-  --accent:#D48832;
+/* KEPCO TBM Helper - Modern Professional Theme */
+:root {
+  /* Brand Colors */
+  --brand-navy: #1a2a40;      /* 깊은 신뢰감을 주는 네이비 */
+  --brand-blue: #3b6885;      /* 메인 브랜드 블루 */
+  --accent-amber: #d48832;    /* 안전/경고 포인트 컬러 */
+  --accent-light: #fdf2e9;    /* 앰버 배경 연색 */
 
-  /* semantic colors */
-  --green:#2E7D32; /* '좋음' 등 성공 색상 */
-  --danger:#ef4444;
-  --warn:#f59e0b;
+  /* Semantic Colors */
+  --status-good: #10b981;
+  --status-warn: #fbbf24;
+  --status-danger: #f43f5e;
 
-  /* surfaces */
-  --bg:#eef3f7;
-  --card:#ffffff;
-  --stroke:#dbe4ea;
+  /* Surface & Text */
+  --bg-main: #f8fafc;         /* 눈이 편안한 오프 화이트 */
+  --card-white: #ffffff;
+  --border-subtle: #e2e8f0;
+  --text-primary: #0f172a;    /* 슬레이트 다크 */
+  --text-muted: #64748b;
 
-  /* text */
-  --text:#0f172a;
-  --muted:#64748b;
-  /* misc */
-  --shadow:0 1px 0 rgba(15, 23, 42, .04);
-}
-*{box-sizing:border-box}
-html,body{height:100%}
-body{margin:0;background:var(--bg);color:var(--text);
-  font-family:system-ui,-apple-system,Segoe UI,Roboto,Apple SD Gothic Neo,Noto Sans KR,sans-serif}
-
-/* --- Splash screen --- */
-body.splash-on{overflow:hidden}
-.splash{position:fixed;inset:0;z-index:9999;background:#000;display:flex;align-items:stretch;justify-content:center}
-.splash-img{width:100%;height:100%;object-fit:cover}
-.splash.hide{opacity:0;pointer-events:none;transition:opacity .90s ease}
-
-.topbar{
-  position:sticky;
-  top:0;
-  z-index:20;
-  background:var(--brand);
-  padding: calc(12px + env(safe-area-inset-top,0px)) 14px 12px;
-  color:#fff;
-  box-shadow:0 1px 0 rgba(0,0,0,.08);
-}
-.topbar-left{display:flex;align-items:center;gap:10px}
-.topbar-title .title{
-  font-weight:1000;
-  letter-spacing:-.2px;
-  font-size:22px;
-}
-.topbar-title .subtitle{font-size:12px;opacity:.92;margin-top:2px}
-.icon-btn{
-  width:48px;
-  height:48px;
-  border-radius:16px;
-  border:1px solid rgba(0,0,0,.08);
-  background:#fff;
-  color:var(--brand);
-  font-weight:1100;
-  font-size:28px;
-  line-height:1;
-  display:grid;
-  place-items:center;
-  transform: translateY(+2px);   /* 👈 여기 추가 */
-  cursor:pointer;
-  box-shadow:0 6px 14px rgba(0,0,0,.16);
+  /* Shadow & Radius */
+  --shadow-card: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -2px rgba(0,0,0,0.04);
+  --radius-lg: 20px;
+  --radius-md: 14px;
 }
 
-.icon-btn:active{
-  transform: translateY(1px) scale(.98);
-  box-shadow:0 3px 8px rgba(0,0,0,.14);
-}
-.pill-btn{border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.14);
-  color:#fff;border-radius:999px;padding:9px 12px;font-weight:1000;cursor:pointer}
-.pill-btn.primary{background:#fff;color:#0f172a;border-color:#fff}
-.pill-btn.danger{background:rgba(239,68,68,.18);border-color:rgba(239,68,68,.35);color:#fff}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
-.container{max-width:860px;margin:0 auto;padding:14px 12px 40px}
-.list{display:flex;flex-direction:column;gap:12px}
-.card{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--stroke);
-  border-radius:14px;padding:14px 14px;text-decoration:none;color:inherit;box-shadow:var(--shadow)}
-.card-icon{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-size:22px}
-.card-icon.shield{background:#fff3e6}
-.card-icon.folder{background:#eef2ff}
-.card-icon.ok{background:#eaf7ec}
-.card-icon.cloud{background:#eaf4ff}
-.card-icon.gear{background:#eaf7ec}
-.card-body{flex:1;min-width:0}
-.card-title{font-weight:1000}
-.card-sub{color:var(--muted);font-size:12px;margin-top:4px;line-height:1.25}
-.card-arrow{font-size:22px;color:#94a3b8}
-
-.panel{display:flex;flex-direction:column;gap:12px}
-.desc{background:#fff;border:1px solid var(--stroke);border-radius:14px;padding:12px;color:var(--muted);font-size:13px}
-.small{font-size:12px}.muted{color:var(--muted)}
-.bigcard{background:#fff;border:1px solid var(--stroke);border-radius:14px;padding:14px;box-shadow:var(--shadow)}
-.big{font-size:18px;font-weight:1000}
-.row2{display:flex;justify-content:space-between;gap:12px;align-items:flex-end}
-.row2 .right{text-align:right}
-.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
-.toolbar .pill-btn{border-color:var(--stroke);background:#fff;color:#0f172a}
-.toolbar .pill-btn.primary{background:var(--brand);border-color:var(--brand);color:#fff}
-.toolbar .pill-btn.danger{background:#fff;border-color:#fecaca;color:#b91c1c}
-
-label{display:block;font-size:12px;color:var(--muted);margin:10px 0 6px}
-input,select,textarea{width:100%;border:1px solid var(--stroke);border-radius:12px;padding:11px 12px;
-  font-size:14px;background:#fff;color:var(--text)}
-textarea{min-height:92px;resize:vertical;white-space:pre-wrap}
-.grid2{display:grid;grid-template-columns:1fr;gap:10px}
-@media(min-width:700px){.grid2{grid-template-columns:1fr 1fr}}
-
-.rule{display:flex;gap:12px;align-items:center;background:#fff;border:1px solid var(--stroke);
-  border-radius:14px;padding:14px;box-shadow:var(--shadow)}
-.rule-badge{width:28px;height:28px;border-radius:10px;background:#fff;display:grid;place-items:center;
-  font-weight:1000;border:1px solid var(--stroke)}
-.rule-title{font-weight:1000}.rule-sub{color:var(--muted);font-size:12px;margin-top:4px}
-.rule.red{border-color:#fecaca;background:#fff7f7}
-.rule.orange{border-color:#fed7aa;background:#fff8ef}
-.rule.yellow{border-color:#fde68a;background:#fffbed}
-.rule.gold{border-color:#fcd34d;background:#fffbdd}
-.rule.green{border-color:#bbf7d0;background:#f2fff7}
-
-.seg{display:flex;gap:10px}
-.seg-btn{flex:1;border-radius:14px;border:1px solid var(--stroke);background:#fff;padding:10px;font-weight:1000;cursor:pointer}
-.seg-btn.active{border-color:var(--brand);box-shadow:0 0 0 2px rgba(var(--brand-rgb),.10) inset}
-
-.alert{border-radius:14px;padding:10px 12px;border:1px solid var(--stroke);font-weight:1000;font-size:12px}
-.alert.warn{background:#fff8ed;border-color:#fde68a;color:#92400e}
-.alert.danger{background:#fff2f2;border-color:#fecaca;color:#991b1b}
-
-.wx-top{display:flex;align-items:flex-start;justify-content:space-between}
-.wx-loc{font-weight:1000}.wx-time{color:var(--muted);font-size:12px;margin-top:3px}
-.wx-icon{font-size:34px}
-.wx-temp{font-size:30px;font-weight:1100;margin-top:6px}
-.wx-sub{color:var(--muted);font-size:12px;margin-top:2px}
-.wx-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
-.kpi{border-radius:14px;border:1px solid var(--stroke);padding:10px;background:#f7fafc}
-.kpi-t{font-size:12px;color:var(--muted);font-weight:1000}
-.kpi-v{font-size:16px;font-weight:1100;margin-top:2px}
-
-.aq-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
-.aq-box{border-radius:14px;border:1px solid var(--stroke);padding:12px;background:#eef6ff}
-.aq-t{color:var(--muted);font-size:12px;font-weight:1000}
-.aq-v{font-size:24px;font-weight:1100;margin-top:2px}
-.aq-q{color:#2563eb;font-weight:1000;margin-top:2px}
-
-.progress{display:flex;align-items:center;gap:10px}
-.bar{flex:1;height:10px;background:#e5e7eb;border-radius:999px;overflow:hidden}
-.bar-fill{height:100%;background:var(--brand);border-radius:999px}
-
-.stack{display:flex;flex-direction:column;gap:12px}
-.hcard{background:#fff;border:1px solid var(--stroke);border-radius:14px;padding:14px;box-shadow:var(--shadow)}
-.hhead{display:flex;align-items:center;gap:10px}
-.hicon{width:30px;height:30px;border-radius:12px;background:#fff2f2;border:1px solid #fecaca;display:grid;place-items:center}
-.htitle{font-weight:1100}
-.hlabel{color:var(--brand);font-weight:1100;font-size:12px}
-ul{margin:8px 0 0 18px;color:#334155}
-li{margin:6px 0;font-size:13px}
-
-.checklist{display:flex;flex-direction:column;gap:10px;margin-top:10px}
-.citem{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--stroke);border-radius:14px;padding:12px;background:#fff}
-.citem input{margin-top:4px;width:18px;height:18px}
-.ctitle{font-weight:1100}
-.cdesc{color:var(--muted);font-size:12px;margin-top:3px}
-.ctag{
-  display:inline-block;
-  font-size:11px;
-  color:#2563eb;
-  background:#eff6ff;
-  border:1px solid #bfdbfe;
-  padding:2px 8px;
-  border-radius:999px;
-  white-space:nowrap;
-  max-width:90px;
-  overflow:hidden;
-  text-overflow:ellipsis;
+body {
+  margin: 0;
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  font-family: 'Pretendard', system-ui, -apple-system, sans-serif;
+  line-height: 1.6;
 }
 
-.sigbox{border:1px dashed #94a3b8;border-radius:14px;background:#fff;padding:12px;margin-top:8px}
-canvas{width:100%;height:160px;display:block;border-radius:12px;background:#fff;border:1px solid var(--stroke)}
-.thumbs{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-.thumbs img{width:88px;height:88px;object-fit:cover;border-radius:12px;border:1px solid var(--stroke)}
-
-
-/* --- In-app video player --- */
-.video-wrap{
-  position:relative;
-  width:100%;
-  padding-top:56.25%; /* 16:9 */
-  border-radius:14px;
-  overflow:hidden;
-  border:1px solid var(--stroke);
-  background:#000;
-}
-.video-frame{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  border:0;
+/* --- 상단 바 (Topbar) --- */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: linear-gradient(135deg, var(--brand-navy), var(--brand-blue));
+  padding: calc(16px + env(safe-area-inset-top, 0px)) 20px 20px;
+  color: #fff;
+  border-bottom-left-radius: 24px;
+  border-bottom-right-radius: 24px;
+  box-shadow: var(--shadow-card);
 }
 
-@media print{
-  header{display:none !important}
-  body{background:#fff}
-  .container{max-width:none;padding:0}
-  .bigcard{page-break-inside:avoid}
-  a[href]:after{content:""}
-  /* 체크박스 보이기 */
-  input[type=checkbox]{appearance:auto;-webkit-appearance:auto}
+.topbar-title .title {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
 }
 
-.hr{height:1px;background:var(--stroke);margin:12px 0}
-
-.mini-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-.mini-btn{
-  display:inline-flex;align-items:center;justify-content:center;
-  border:1px solid var(--stroke);background:#fff;color:var(--text);
-  padding:8px 10px;border-radius:12px;font-weight:1000;text-decoration:none;
-}
-.mini-btn.primary{background:var(--brand);border-color:var(--brand);color:#fff}
-.mini-btn.danger{border-color:#fecaca;color:#b91c1c}
-
-.weekly{display:flex;flex-direction:column;gap:8px;margin-top:10px}
-.wrow{display:flex;align-items:center;justify-content:space-between;gap:10px;
-  border:1px solid var(--stroke);border-radius:14px;padding:10px 12px;background:#f8fafc}
-.wleft{display:flex;align-items:center;gap:10px;min-width:0}
-.wday{font-weight:1100;min-width:56px}
-.wicon{font-size:18px}
-.wdesc{color:var(--muted);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.wright{display:flex;align-items:center;gap:10px;font-weight:1100}
-.whilo{white-space:nowrap}
-.wpop{color:#2563eb;font-weight:1100;white-space:nowrap}
-
-
-/* ===== Weather UI (photo-like) ===== */
-.seg-btn .seg-ico{margin-right:6px}
-
-.wx-warn{
-  background:#fff;
-  border:1px solid var(--stroke);
-  border-radius:14px;
-  padding:12px;
-}
-.wx-warn-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.wx-warn-head-left{display:flex;align-items:center;gap:8px}
-.wx-warn-ico{
-  width:28px;height:28px;border-radius:10px;
-  display:grid;place-items:center;
-  background:#fff7ed;border:1px solid #fed7aa;
-}
-.wx-warn-title{font-weight:1100}
-.wx-warn-list{display:flex;flex-direction:column;gap:10px}
-.wx-warn-item{
-  display:flex;gap:10px;align-items:flex-start;
-  border:1px solid var(--stroke);
-  border-radius:14px;
-  padding:12px;
-  background:#fff;
-}
-.wx-warn-badge{
-  font-size:11px;
-  font-weight:1100;
-  padding:3px 10px;
-  border-radius:999px;
-  white-space:nowrap;
-  flex:0 0 auto;
-}
-.wx-warn-text{font-size:13px;line-height:1.35}
-
-.wx-warn-item.manage{background:#eff6ff;border-color:#bfdbfe}
-.wx-warn-item.manage .wx-warn-badge{background:#2563eb;color:#fff}
-
-.wx-warn-item.caution{background:#fff8ed;border-color:#fde68a}
-.wx-warn-item.caution .wx-warn-badge{background:#f59e0b;color:#fff}
-
-.wx-warn-item.warning{background:#fff1e8;border-color:#fdba74}
-.wx-warn-item.warning .wx-warn-badge{background:#f97316;color:#fff}
-
-.wx-warn-item.danger{background:#fff2f2;border-color:#fecaca}
-.wx-warn-item.danger .wx-warn-badge{background:#ef4444;color:#fff}
-
-/* Weather card layout */
-.wx-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
-.wx-place{display:flex;flex-direction:column;gap:2px;min-width:0}
-.wx-now{color:var(--muted);font-size:12px;margin-top:2px}
-.wx-main2{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:10px}
-.wx-feel{font-size:44px;font-weight:1200;letter-spacing:-.4px}
-.wx-icon2{font-size:56px;line-height:1}
-
-.wx-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
-.kpi{
-  border-radius:14px;border:1px solid var(--stroke);
-  padding:12px;background:#f8fafc;
-  text-align:center
-}
-.kpi-ico{font-size:18px}
-.kpi-t{font-size:12px;color:var(--muted);font-weight:1000;margin-top:4px}
-.kpi-v{font-size:16px;font-weight:1100;margin-top:6px}
-
-/* Air quality box tint by level */
-.aq-box{background:#fff}
-.aq-box.good{background:#ecfdf5;border-color:#bbf7d0}
-.aq-box.normal{background:#f0fdf4;border-color:#bbf7d0}
-.aq-box.bad{background:#fff7ed;border-color:#fed7aa}
-.aq-box.verybad{background:#fff2f2;border-color:#fecaca}
-.aq-unit{font-size:12px;color:var(--muted);margin-left:4px;font-weight:1000}
-
-
-/* --- Home clock widget --- */
-.home-clock{
-  border-radius:18px;
-  padding:14px 14px 12px;
-  border:1px solid rgba(var(--brand-rgb),.18);
-  background: linear-gradient(135deg, rgba(var(--brand-rgb),.14), rgba(var(--brand-rgb),.04));
-  position:relative;
-  overflow:hidden;
-  text-align:center;
-}
-.home-clock:before{
-  content:"";
-  position:absolute; inset:-40px -80px auto auto;
-  width:220px; height:220px;
-  background: radial-gradient(circle at 30% 30%, rgba(var(--brand-rgb),.22), rgba(var(--brand-rgb),0) 62%);
-  transform: rotate(12deg);
-}
-.home-clock *{ position:relative; }
-
-.home-clock-date{
-  color:var(--muted);
-  font-weight:1100;
-  font-size:14px;
-  white-space:nowrap;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  margin-top:0;
-  margin-bottom:8px;
+.topbar-title .subtitle {
+  font-size: 13px;
+  opacity: 0.85;
+  font-weight: 500;
+  margin-top: 2px;
 }
 
-.home-clock-time{
-  font-weight:1200;
-  letter-spacing:-1px;
-  line-height:1;
-  font-size: 84px;
-  color:#0f172a;
-  display:flex;
-  align-items:flex-start;
-  justify-content:center;
-}
-.home-clock-sec{
-  margin-left:8px;
-  font-size:32px;
-  color:var(--muted);
-  font-weight:1100;
-  line-height:1;
-  padding-top:10px;
+.icon-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  border: none;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: transform 0.2s;
 }
 
-.home-weather-chips{
-  margin-top:12px;
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:center;
-  gap:8px;
+.icon-btn:active { transform: scale(0.92); background: rgba(255, 255, 255, 0.25); }
+
+/* --- 메인 홈 시계 위젯 --- */
+.home-clock {
+  background: var(--card-white);
+  border-radius: var(--radius-lg);
+  padding: 32px 20px;
+  text-align: center;
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-card);
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
 }
 
-.home-chip{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  padding:6px 10px;
-  border-radius:999px;
-  background: rgba(255,255,255,.78);
-  border:1px solid rgba(226,233,223,.92);
-  box-shadow:0 1px 0 rgba(15,23,42,.04);
-  font-size:12px;
-  font-weight:1000;
-  color:#0f172a;
-  white-space:nowrap;
+.home-clock::before {
+  content: "";
+  position: absolute;
+  top: -20px; right: -20px;
+  width: 100px; height: 100px;
+  background: radial-gradient(circle, var(--accent-light) 0%, transparent 70%);
 }
 
-/* severity */
-.home-chip.good{
-  background: rgba(46,125,50,.10);
-  border-color: rgba(46,125,50,.22);
-  color: var(--green);
-}
-.home-chip.ok{
-  background: rgba(100,116,139,.10);
-  border-color: rgba(100,116,139,.18);
-  color: #334155;
-}
-.home-chip.warn{
-  background: rgba(245,158,11,.14);
-  border-color: rgba(245,158,11,.24);
-  color: #92400e;
-}
-.home-chip.bad{
-  background: rgba(239,68,68,.12);
-  border-color: rgba(239,68,68,.22);
-  color: #991b1b;
+.home-clock-date {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--accent-amber);
+  margin-bottom: 10px;
 }
 
-@media (max-width:420px){
-  .home-clock-time{ font-size: 68px; }
-  .home-clock-sec{ font-size:16px; padding-top:8px; }
-  .home-chip{ font-size:11px; padding:6px 9px; }
+.home-clock-time {
+  font-size: 68px;
+  font-weight: 900;
+  color: var(--brand-navy);
+  letter-spacing: -2px;
+  line-height: 1;
 }
 
-.home-clock-chip{ min-width:96px; }
+.home-clock-sec {
+  font-size: 28px;
+  color: var(--text-muted);
+  margin-left: 8px;
+  font-weight: 600;
+}
 
+/* --- 공통 카드 UI --- */
+.container { max-width: 600px; margin: 0 auto; padding: 20px 16px 40px; }
 
-/* --- Home alerts widget --- */
-.home-alerts{
-  border-radius:18px;
-  border:1px solid rgba(var(--brand-rgb),.14);
-  background: rgba(255,255,255,.96);
-  padding:14px;
+.card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--card-white);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  text-decoration: none;
+  color: inherit;
+  margin-bottom: 14px;
+  border: 1px solid var(--border-subtle);
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
 }
-.home-alerts-head{
-  display:flex;
-  align-items:baseline;
-  justify-content:space-between;
-  gap:10px;
-  margin-bottom:10px;
+
+.card:active {
+  transform: translateY(2px) scale(0.98);
+  box-shadow: none;
+  background: #f1f5f9;
 }
-.home-alerts-title{
-  font-weight:1100;
-  font-size:14px;
-  letter-spacing:-.2px;
+
+.card-icon {
+  width: 54px;
+  height: 54px;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  font-size: 26px;
+  flex-shrink: 0;
 }
-.home-alerts-sub{
-  font-size:12px;
-  font-weight:1000;
-  color:var(--muted);
-  white-space:nowrap;
+
+/* 아이콘별 부드러운 배경색 */
+.card-icon.gear { background: #eff6ff; color: #3b82f6; }
+.card-icon.ok { background: #ecfdf5; color: #10b981; }
+.card-icon.cloud { background: #fffbeb; color: #f59e0b; }
+.card-icon.folder { background: #fdf2f8; color: #db2777; }
+
+.card-body { flex: 1; min-width: 0; }
+.card-title { font-weight: 800; font-size: 17px; margin-bottom: 4px; color: var(--brand-navy); }
+.card-sub { font-size: 13px; color: var(--text-muted); line-height: 1.4; }
+.card-arrow { color: #cbd5e1; font-size: 22px; }
+
+/* --- 날씨 위젯 세부 스타일 --- */
+.wx-feel {
+  font-size: 52px;
+  font-weight: 900;
+  background: linear-gradient(to bottom, var(--brand-navy), var(--brand-blue));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
-.home-alerts-stack{
-  gap:8px; /* stack 기본 gap보다 촘촘하게 */
+
+.kpi {
+  background: #fff;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  text-align: center;
 }
-.contact-name {
-  white-space: nowrap;
+
+/* --- 버튼 스타일 --- */
+.pill-btn {
+  border-radius: 999px;
+  padding: 14px 28px;
+  font-weight: 800;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  font-size: 15px;
 }
+
+.pill-btn.primary {
+  background: var(--brand-navy);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(26, 42, 64, 0.25);
+}
+
+.pill-btn.primary:active { transform: scale(0.96); }
