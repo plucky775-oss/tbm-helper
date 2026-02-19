@@ -2,20 +2,44 @@
 <html lang="ko">
 <head>
   <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>TBM도우미</title>
-  <meta name="theme-color" content="#2E7D32">
-  <link rel="manifest" href="manifest.webmanifest">
-  <link rel="stylesheet" href="styles.css">
+  <meta name="theme-color" content="#3B6885">
+  <link rel="manifest" href="manifest.webmanifest?v=2026021902">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png?v=20260217">
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png?v=20260217">
+  <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16.png?v=20260217">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="TBM도우미">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="stylesheet" href="styles.css?v=2026021902">
+
+  <style>
+    /* 홈(첫화면) 날짜/시계 크게 */
+    .home-clock{padding-top:22px;padding-bottom:22px;}
+    .home-clock-date{font-size:20px;font-weight:800;letter-spacing:-0.2px;opacity:.9;}
+    .home-clock-time{font-size:92px;font-weight:900;letter-spacing:-1px;line-height:1;margin-top:6px;}
+    .home-clock-sec{font-size:34px;font-weight:800;margin-left:10px;opacity:.7;}
+    @media (max-width:420px){
+      .home-clock-time{font-size:74px;}
+      .home-clock-sec{font-size:28px;margin-left:8px;}
+      .home-clock-date{font-size:18px;}
+    }
+  </style>
 </head>
-<body>
+<body class="splash-on">
+<div id="splash" class="splash" aria-label="TBM도우미 시작화면">
+  <img class="splash-img" src="assets/splash.jpg?v=2026021705" alt="TBM도우미 시작화면"/>
+</div>
+
 <header class="topbar">
   <div class="topbar-left">
-    <button id="btnBack" class="icon-btn" aria-label="뒤로" hidden>‹</button>
-    <button id="btnHome" class="icon-btn" aria-label="홈" hidden>⌂</button>
+    <button id="btnBack" class="icon-btn" aria-label="뒤로" hidden>⬅</button>
+    <button id="btnHome" class="icon-btn" aria-label="홈" hidden>🏠</button>
     <div class="topbar-title">
       <div class="title" id="pageTitle">TBM도우미</div>
-      <div class="subtitle" id="pageSub">현장 TBM 회의록</div>
+      <div class="subtitle" id="pageSub">안산지사 전력공급부</div>
     </div>
   </div>
   <div class="topbar-right">
@@ -28,35 +52,32 @@
 <!-- HOME -->
 <template id="tpl-home">
   <section class="list">
-    <a class="card nav" href="#/tbm/new">
-      <div class="card-icon shield">📝</div>
+    <div class="bigcard home-clock" aria-label="현재 날짜와 시간">
+      <div class="home-clock-date" id="homeDate">-</div>
+      <div class="home-clock-time" aria-label="현재 시간">
+        <span id="homeTime">--:--</span><span class="home-clock-sec" id="homeSec">--</span>
+      </div>
+    </div>
+    <a class="card nav" href="#/trades">
+      <div class="card-icon gear">👷</div>
       <div class="card-body">
-        <div class="card-title">TBM 회의록 작성</div>
-        <div class="card-sub">작업정보 · 위험요인/대책 · 체크리스트 · 서명 · 사진 · PDF</div>
+        <div class="card-title">공종별 위험요인 및 안전대책</div>
+        <div class="card-sub">가공·지중 배전공사 공종 선택 → 표로 확인</div>
       </div>
       <div class="card-arrow">›</div>
     </a>
 
-    <a class="card nav" href="#/tbm/list">
-      <div class="card-icon folder">📁</div>
+    <a class="card nav" href="#/refs">
+      <div class="card-icon ok">📙</div>
       <div class="card-body">
-        <div class="card-title">저장된 TBM</div>
-        <div class="card-sub">불러오기 · 삭제 · 검색</div>
-      </div>
-      <div class="card-arrow">›</div>
-    </a>
-
-    <a class="card nav" href="#/rules">
-      <div class="card-icon ok">🛡️</div>
-      <div class="card-body">
-        <div class="card-title">5대 안전지킴이</div>
-        <div class="card-sub">안전장구 · 안전회의 · 검전접지 · 활선방호 · 작업절차</div>
+        <div class="card-title">안전수칙</div>
+        <div class="card-sub">골든룰스 11 · TBM 가이드 · 5대 안전지킴이</div>
       </div>
       <div class="card-arrow">›</div>
     </a>
 
     <a class="card nav" href="#/weather">
-      <div class="card-icon cloud">☁️</div>
+      <div class="card-icon cloud">🌤</div>
       <div class="card-body">
         <div class="card-title">현장 날씨·미세먼지</div>
         <div class="card-sub">실시간 기상 정보 및 작업 안전 경고</div>
@@ -64,20 +85,8 @@
       <div class="card-arrow">›</div>
     </a>
 
-    
-    <a class="card nav" href="#/emergency">
-      <div class="card-icon folder">🏥</div>
-      <div class="card-body">
-        <div class="card-title">응급의료시설(위치기반)</div>
-        <div class="card-sub">현재 위치 기준 응급실/응급의료기관 검색 바로가기</div>
-      </div>
-      <div class="card-arrow">›</div>
-    </a>
-
-
-    
     <a class="card nav" href="#/streetview">
-      <div class="card-icon cloud">👁️</div>
+      <div class="card-icon cloud">🛣</div>
       <div class="card-body">
         <div class="card-title">거리뷰(현장 확인)</div>
         <div class="card-sub">현재 위치 주변 거리뷰/로드뷰 바로가기</div>
@@ -85,15 +94,168 @@
       <div class="card-arrow">›</div>
     </a>
 
-
-    <a class="card nav" href="#/tasks">
-      <div class="card-icon gear">⚙️</div>
+    <a class="card nav" href="#/emergency">
+      <div class="card-icon folder">🚑</div>
       <div class="card-body">
-        <div class="card-title">단위작업 위험요인</div>
-        <div class="card-sub">작업 선택 → 위험요인/대책 카드</div>
+        <div class="card-title">응급의료시설(위치기반)</div>
+        <div class="card-sub">현재 위치 기준 응급실/응급의료기관 검색 바로가기</div>
       </div>
       <div class="card-arrow">›</div>
     </a>
+
+  
+    <a class="card nav" href="#/contacts">
+      <div class="card-icon cloud">📞</div>
+      <div class="card-body">
+        <div class="card-title">비상 연락망</div>
+        <div class="card-sub">회사/현장 연락처 저장 · 바로 전화</div>
+      </div>
+      <div class="card-arrow">›</div>
+    </a>
+
+</section>
+</template>
+
+<!-- CONTACTS -->
+<template id="tpl-contacts">
+  <section class="panel">
+    <div class="desc">
+      비상 연락처를 <b>기기 내</b>에 저장합니다.<br/>
+      <span class="muted small">※ 서버 전송 없음 / 이 기기(브라우저)에서만 보관</span>
+    </div>
+
+    <div class="bigcard">
+      <div class="card-title">연락처 추가</div>
+
+      <label class="muted small">회사명</label>
+      <input id="cCompany" placeholder="예: OO전기, OO협력사" />
+
+      <label class="muted small" style="margin-top:10px">이름</label>
+      <input id="cName" placeholder="예: 홍길동" />
+
+      <label class="muted small" style="margin-top:10px">전화번호</label>
+      <input id="cPhone" placeholder="예: 010-1234-5678" inputmode="tel" />
+
+      <div class="toolbar" style="margin-top:12px">
+        <button class="pill-btn primary" id="cAdd" type="button">저장</button>
+        <button class="pill-btn" id="cClear" type="button">입력 초기화</button>
+      </div>
+    </div>
+
+    <div class="bigcard" style="margin-top:12px">
+      <div class="card-title">저장된 연락처</div>
+      <div class="muted small" id="cHint">전화 버튼을 누르면 바로 전화 앱으로 연결됩니다.</div>
+      <div class="stack" id="cList" style="margin-top:10px"></div>
+    </div>
+  </section>
+</template>
+
+<!-- REFERENCES -->
+<template id="tpl-refs">
+  <section class="panel">
+    <div class="desc">현장에서의 기본 안전수칙을 모았습니다.</div>
+    <div class="list" id="refsList">
+      <a class="card nav" href="#/refs/golden11">
+        <div class="card-icon shield">👑</div>
+        <div class="card-body">
+          <div class="card-title">골든룰스 11</div>
+          <div class="card-sub">TBM 전 핵심 확인 항목 11가지</div>
+        </div>
+        <div class="card-arrow">›</div>
+      </a>
+
+      <a class="card nav" href="#/refs/tbmguide">
+        <div class="card-icon cloud">🎥</div>
+        <div class="card-body">
+          <div class="card-title">TBM 가이드</div>
+          <div class="card-sub">유튜브 영상으로 TBM 작성 방법 보기</div>
+        </div>
+        <div class="card-arrow">›</div>
+      </a>
+
+      <a class="card nav" href="#/refs/safety5">
+        <div class="card-icon ok">🖐</div>
+        <div class="card-body">
+          <div class="card-title">5대 안전지킴이</div>
+          <div class="card-sub">안전장구 · 안전회의 · 검전접지 · 활선방호 · 작업절차</div>
+        </div>
+        <div class="card-arrow">›</div>
+      </a>
+    </div>
+  </section>
+</template>
+
+<!-- GOLDEN RULES 11 -->
+<template id="tpl-golden11">
+  <section class="panel">
+    <div class="desc">
+      한국전력 안전처 공식 채널의 <b>Golden-Rules 11</b> 영상과 함께 확인합니다.<br/>
+      <span class="muted small">※ 항목을 누르면 해당 Rule의 영상이 앱 안에서 재생됩니다.</span>
+    </div>
+
+    <div class="bigcard">
+      <div class="card-title">유튜브</div>
+      <div class="mini-row"><a class="mini-btn primary" id="g11Channel" href="#" target="_blank" rel="noopener">채널 열기</a>
+      </div>
+    </div>
+
+    <div class="list" id="golden11List"></div>
+  </section>
+</template>
+
+<!-- GOLDEN RULES 11 DETAIL -->
+<template id="tpl-golden11-detail">
+  <section class="panel">
+    <div class="bigcard">
+      <div class="muted small" id="g11No">Rule.-</div>
+      <div class="big" id="g11Title">-</div>
+      <div class="muted small" style="margin-top:8px" id="g11Desc">-</div>
+
+      <div class="video-wrap" style="margin-top:12px">
+        <iframe id="g11Frame" class="video-frame"
+          src=""
+          title="Golden Rules 11"
+          loading="lazy"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen
+          referrerpolicy="strict-origin-when-cross-origin"></iframe>
+      </div>
+
+      <div class="mini-row" style="margin-top:12px">
+        <a class="mini-btn primary" id="g11Open" href="#" target="_blank" rel="noopener">유튜브에서 열기</a><a class="mini-btn" id="g11Search" href="#" target="_blank" rel="noopener">채널 검색</a>
+      </div>
+
+      <div class="muted small" style="margin-top:10px">
+        ※ 기기/브라우저 환경에 따라 인앱 재생이 제한될 수 있습니다.
+      </div>
+    </div>
+  </section>
+</template>
+
+<!-- TBM GUIDE -->
+<template id="tpl-tbmguide">
+  <section class="panel">
+    <div class="desc">
+      TBM 작성 방법을 영상으로 확인합니다.<br/>
+      <span class="muted small">※ 기기/브라우저 환경에 따라 재생이 안 되면 “유튜브에서 열기”를 사용하세요.</span>
+    </div>
+
+    <div class="bigcard">
+      <div class="card-title">TBM 가이드</div>
+      <div class="video-wrap">
+        <iframe id="tbmGuideFrame" class="video-frame"
+          src=""
+          title="TBM 가이드"
+          loading="lazy"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen
+          referrerpolicy="strict-origin-when-cross-origin"></iframe>
+      </div>
+
+      <div class="mini-row" style="margin-top:10px">
+        <a class="mini-btn primary" id="tbmGuideOpen" href="#" target="_blank" rel="noopener">유튜브에서 열기</a>
+      </div>
+    </div>
   </section>
 </template>
 
@@ -112,191 +274,84 @@
 <template id="tpl-weather">
   <section class="panel">
     <div class="seg">
-      <button class="seg-btn active" id="btnCity">안산시</button>
-      <button class="seg-btn" id="btnHere">현재 위치</button>
+      <button class="seg-btn active" id="btnHere"><span class="seg-ico">📌</span>현재 위치로 새로고침</button>
+      <button class="seg-btn" id="btnCity" hidden>안산시</button>
+</div>
+
+    <div class="wx-warn" id="wxWarnWrap" hidden>
+      <div class="wx-warn-head">
+        <div class="wx-warn-head-left">
+          <div class="wx-warn-ico">⚠️</div>
+          <div class="wx-warn-title">작업 안전 경고</div>
+        </div>
+      </div>
+      <div class="wx-warn-list" id="wxWarnList"></div>
     </div>
 
-    <div class="alert warn" id="alertCold" hidden>주의  체감온도 낮음 — 주기적 휴식, 한랭질환 증상 시 작업 자율중지 허용</div>
-    <div class="alert danger" id="alertWind" hidden>위험  풍속 10m/s 이상 — 고소작업 중지 권고</div>
-
     <div class="bigcard" id="wxCard">
-      <div class="wx-top">
-        <div>
-          <div class="wx-loc" id="wxLoc">안산시</div>
-          <div class="wx-time" id="wxTime">-</div>
+      <div class="wx-head">
+        <div class="wx-place">
+          <div class="wx-loc" id="wxLoc">현재 위치</div>
+          <div class="wx-now" id="wxNow">현재 -° · -</div>
         </div>
-        <div class="wx-icon" id="wxIcon">☀️</div>
+        <div class="wx-time" id="wxTime">-</div>
       </div>
-      <div class="wx-main">
-        <div class="wx-temp" id="wxFeel">체감 -</div>
-        <div class="wx-sub" id="wxDesc">-</div>
+
+      <div class="wx-main2">
+        <div class="wx-feel" id="wxFeel">체감 -°</div>
+        <div class="wx-icon2" id="wxIcon">☀️</div>
       </div>
+
       <div class="wx-kpis">
-        <div class="kpi"><div class="kpi-t">습도</div><div class="kpi-v" id="wxHum">-</div></div>
-        <div class="kpi"><div class="kpi-t">풍속</div><div class="kpi-v" id="wxWind">-</div></div>
-        <div class="kpi"><div class="kpi-t">기온</div><div class="kpi-v" id="wxTemp">-</div></div>
+        <div class="kpi">
+          <div class="kpi-ico">💧</div>
+          <div class="kpi-t">습도</div>
+          <div class="kpi-v" id="wxHum">-</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-ico">🌬️</div>
+          <div class="kpi-t">풍속</div>
+          <div class="kpi-v" id="wxWind">-</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-ico">🌡️</div>
+          <div class="kpi-t">기온</div>
+          <div class="kpi-v" id="wxTemp">-</div>
+        </div>
       </div>
     </div>
 
     <div class="bigcard">
       <div class="card-title">대기질 (미세먼지)</div>
       <div class="aq-grid">
-        <div class="aq-box">
+        <div class="aq-box" id="aq10Box">
           <div class="aq-t">미세먼지 (PM10)</div>
-          <div class="aq-v" id="pm10">-</div>
+          <div class="aq-v"><span id="pm10">-</span><span class="aq-unit">µg/m³</span></div>
           <div class="aq-q" id="pm10q">-</div>
         </div>
-        <div class="aq-box">
+        <div class="aq-box" id="aq25Box">
           <div class="aq-t">초미세먼지 (PM2.5)</div>
-          <div class="aq-v" id="pm25">-</div>
+          <div class="aq-v"><span id="pm25">-</span><span class="aq-unit">µg/m³</span></div>
           <div class="aq-q" id="pm25q">-</div>
         </div>
       </div>
-      <div class="muted small">기준(권장): 좋음 0~30 · 보통 31~80 · 나쁨 81~150 · 매우나쁨 151+</div>
+      <div class="muted small">
+        기준(권장): PM10 좋음 0~30 · 보통 31~80 · 나쁨 81~150 · 매우나쁨 151+ /
+        PM2.5 좋음 0~15 · 보통 16~35 · 나쁨 36~75 · 매우나쁨 76+
+      </div>
     </div>
   </section>
 
-    <div class="bigcard" id="weeklyCard">
-      <div class="card-title">주간 날씨</div>
-      <div class="weekly" id="weeklyList"></div>
-    </div>
-
+  <div class="bigcard" id="weeklyCard">
+    <div class="card-title">주간 날씨</div>
+    <div class="weekly" id="weeklyList"></div>
+  </div>
 </template>
-
 <!-- TASK LIST -->
-<template id="tpl-tasklist">
-  <section class="panel">
-    <div class="desc">단위 작업을 선택하면 위험요인/안전대책 카드가 표시됩니다. “TBM로 가져오기” 버튼으로 회의록에 자동 반영할 수 있습니다.</div>
-    <div class="list" id="taskList"></div>
-  </section>
-</template>
 
 <!-- TASK DETAIL -->
-<template id="tpl-taskdetail">
-  <section class="panel">
-    <div class="toolbar">
-      <button class="pill-btn" id="btnToTBM">이 작업을 TBM로 가져오기</button>
-    </div>
-    <div class="progress">
-      <div class="bar"><div class="bar-fill" id="barFill" style="width:0%"></div></div>
-      <div class="muted small" id="barText">0/0</div>
-    </div>
-    <div class="stack" id="hazCards"></div>
-  </section>
-</template>
 
 <!-- TBM EDITOR -->
-<template id="tpl-tbm">
-  <section class="panel">
-    <div class="bigcard">
-      <div class="row2">
-        <div>
-          <div class="muted small">오늘 날짜</div>
-          <div class="big" id="tbmToday">-</div>
-        </div>
-        <div class="right">
-          <div class="muted small">저장된 TBM</div>
-          <div class="big"><span id="tbmCount">0</span>건</div>
-        </div>
-      </div>
-      <div class="toolbar">
-        <button class="pill-btn" id="btnSave">저장</button>
-        <button class="pill-btn" id="btnCopy">이전 TBM 복사</button>
-        <button class="pill-btn primary" id="btnPrint">PDF 내보내기</button>
-      </div>
-    </div>
-
-    <div class="bigcard">
-      <div class="card-title">1) 기본정보</div>
-      <div class="grid2">
-        <div>
-          <label>작업명</label>
-          <input id="jobName" placeholder="예: 전주 세우기(건주) / 변압기 교체" />
-        </div>
-        <div>
-          <label>장소</label>
-          <input id="location" placeholder="예: ○○시 ○○로, ○○현장" />
-        </div>
-      </div>
-      <div class="grid2">
-        <div>
-          <label>일시</label>
-          <input id="datetime" type="datetime-local" />
-        </div>
-        <div>
-          <label>작업유형 템플릿</label>
-          <select id="template"><option value="">선택</option></select>
-        </div>
-      </div>
-      <label>작업내용(요약)</label>
-      <textarea id="workDesc" placeholder="오늘 작업 범위/순서/주요 장비/작업반경 등을 간단히"></textarea>
-    </div>
-
-    <div class="bigcard">
-      <div class="card-title">2) 위험요인/대책</div>
-      <div class="grid2">
-        <div>
-          <label>위험요인 선택</label>
-          <select id="hazardPick"><option value="">선택해서 추가</option></select>
-        </div>
-        <div>
-          <label>추가 위험요인(직접 입력)</label>
-          <input id="hazardCustom" placeholder="예: 민원 차량 통행, 협소 공간 등" />
-        </div>
-      </div>
-      <div class="toolbar">
-        <button class="pill-btn" id="btnAddHazard">위험요인 추가</button>
-        <button class="pill-btn" id="btnGenMeasures">대책 자동 생성</button>
-        <button class="pill-btn danger" id="btnClearHaz">초기화</button>
-      </div>
-      <label>선정된 위험요인</label>
-      <textarea id="hazards" readonly placeholder="위험요인 목록"></textarea>
-      <label>대책(Controls)</label>
-      <textarea id="measures" placeholder="자동 생성 후 현장에 맞게 수정"></textarea>
-      <div class="muted small">TIP: “단위작업 위험요인” 화면에서 작업을 선택하고 “TBM로 가져오기”를 누르면 자동으로 채워집니다.</div>
-    </div>
-
-    <div class="bigcard">
-      <div class="card-title">3) 체크리스트 (회의용)</div>
-      <div class="checklist" id="checklist"></div>
-    </div>
-
-    <div class="bigcard">
-      <div class="card-title">4) 참석자/서명/사진</div>
-      <div class="grid2">
-        <div>
-          <label>참석자(쉼표로 구분)</label>
-          <input id="attendees" placeholder="예: 홍길동, 김철수, 박영희" />
-        </div>
-        <div>
-          <label>비고</label>
-          <input id="memo" placeholder="예: 특이사항/민원/기상" />
-        </div>
-      </div>
-
-      <label>전자서명</label>
-      <div class="sigbox">
-        <canvas id="sig" aria-label="서명 캔버스"></canvas>
-        <div class="toolbar">
-          <button class="pill-btn" id="btnSigClear">서명 지우기</button>
-          <div class="muted small">손가락/마우스로 서명하세요.</div>
-        </div>
-      </div>
-
-      <label>사진 첨부(권장 1~3장)</label>
-      <input id="photos" type="file" accept="image/*" multiple />
-      <div class="thumbs" id="thumbs"></div>
-      <div class="muted small">※ 사진은 기기 로컬에 저장됩니다(기기 변경 시 사라질 수 있음)</div>
-    </div>
-
-    <div class="bigcard">
-      <div class="card-title">저장 목록</div>
-      <input id="search" placeholder="검색: 작업명/장소" />
-      <div class="list" id="savedList"></div>
-    </div>
-  </section>
-</template>
-
 
 <!-- EMERGENCY -->
 <template id="tpl-emergency">
@@ -322,6 +377,15 @@
         <button class="pill-btn primary" id="btnGetLoc">위치 가져오기</button>
         <a class="pill-btn" id="btnCall119" href="tel:119">119 전화</a>
         <button class="pill-btn" id="btnCopyCoord">좌표 복사</button>
+      </div>
+
+      <div class="hr"></div>
+      <div class="card-title">가까운 응급의료시설</div>
+      <div class="muted small" id="emgStatus">위치 확인 후 주변 시설을 불러옵니다.</div>
+      <div class="stack" id="emgResults" style="margin-top:10px"></div>
+
+      <div class="muted small" style="margin-top:10px">
+        ※ 결과는 공공데이터포털(B552657) 기반이며 실제 운영 여부는 전화로 확인하세요.
       </div>
 
       <div class="hr"></div>
@@ -367,23 +431,11 @@
       </div>
 
       <div class="muted small" style="margin-top:10px">
-        
-      <div class="hr"></div>
-      <div class="card-title">가까운 응급의료시설</div>
-      <div class="muted small" id="emgStatus">위치 확인 후 주변 시설을 불러옵니다.</div>
-      <div class="stack" id="emgResults" style="margin-top:10px"></div>
-
-      <div class="muted small" style="margin-top:10px">
-        ※ 결과는 OpenStreetMap(Overpass) 기반이며 실제 운영 여부는 전화로 확인하세요.
-      </div>
-
-      <div class="muted small" style="margin-top:10px">
-TIP: 위치가 안 잡히면 iOS 설정 &gt; Safari &gt; 위치에서 “허용”으로 바꿔주세요.
+        TIP: 위치가 안 잡히면 iOS 설정 &gt; Safari &gt; 위치에서 “허용”으로 바꿔주세요.
       </div>
     </div>
   </section>
 </template>
-
 
 <!-- STREETVIEW -->
 <template id="tpl-streetview">
@@ -412,6 +464,18 @@ TIP: 위치가 안 잡히면 iOS 설정 &gt; Safari &gt; 위치에서 “허용�
 
       <div class="hr"></div>
 
+      <div class="card-title">주소로 네이버 거리뷰</div>
+      <input id="svAddr" placeholder="주소 입력 (예: 안산시 단원구 ○○로 123)" />
+      
+      <div class="toolbar">
+        <button class="pill-btn primary" id="btnKakaoNavi" type="button">카카오내비 길찾기</button>
+        <button class="pill-btn" id="btnTmapNavi" type="button">티맵 길찾기</button>
+      </div>
+      <div class="muted small" id="svAddrStatus" style="margin-top:6px">주소를 입력하고 Enter를 누르세요.</div>
+      <div class="muted small" style="margin-top:6px">Enter: 네이버지도 / 버튼: 카카오·티맵 길찾기(카카오: 명칭검색 가능, 티맵: 주소로만 검색해주세요.)</div>
+
+      <div class="hr"></div>
+
       <div class="stack" id="svLinks"></div>
 
       <div class="muted small" style="margin-top:10px">
@@ -421,7 +485,351 @@ TIP: 위치가 안 잡히면 iOS 설정 &gt; Safari &gt; 위치에서 “허용�
   </section>
 </template>
 
+<!-- TRADES -->
+<template id="tpl-trades">
+  <section class="panel">
+    <div class="desc">
+      가공/지중 배전공사의 주요 <b>공종</b>을 선택하면 <b>위험요인</b>과 <b>안전대책</b>이 표로 표시됩니다.
+    </div>
+
+    <div class="bigcard">
+      <div class="card-title">가공 배전공사</div>
+      <div class="list" id="overTradeList"></div>
+    </div>
+
+    <div class="bigcard">
+      <div class="card-title">지중 배전공사</div>
+      <div class="list" id="undTradeList"></div>
+    </div>
+  </section>
+</template>
+
+<template id="tpl-trade-detail">
+  <section class="panel">
+    <div class="desc" id="tradeMeta">-</div>
+
+    <div class="bigcard">
+      <div class="card-title">위험요인 및 안전대책</div>
+      <div style="overflow:auto">
+        <table id="tradeTable"
+          style="width:100%; border-collapse:separate; border-spacing:0; border:1px solid var(--stroke);
+                 border-radius:14px; overflow:hidden;">
+          <thead>
+            <tr>
+              <th style="text-align:left; padding:10px 12px; font-size:12px; color:var(--muted);
+                         border-bottom:1px solid var(--stroke); background:#f8fafc; width:34%;">위험요인</th>
+              <th style="text-align:left; padding:10px 12px; font-size:12px; color:var(--muted);
+                         border-bottom:1px solid var(--stroke); background:#f8fafc;">안전대책</th>
+            </tr>
+          </thead>
+          <tbody id="tradeTableBody"></tbody>
+        </table>
+      </div>
+      <div class="muted small" style="margin-top:10px">
+        ※ 현장 여건/작업절차/운영지시(정전·활선 등)에 따라 대책을 추가·강화하세요.
+      </div>
+    </div>
+  </section>
+</template>
+
 <script src="data.js"></script>
-<script src="app.js"></script>
+<script src="app.js?v=2026021902"></script>
+
+<script>
+/* 날씨 화면: 안산시 고정 제거 → 현재 위치 기반 */
+(function(){
+  function loadHere(){
+    if(!navigator.geolocation){
+      alert('이 기기에서는 위치 기능을 사용할 수 없습니다.');
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+      function(pos){
+        if(typeof window.loadWeather === 'function'){
+          window.loadWeather('현재 위치', pos.coords.latitude, pos.coords.longitude);
+        }
+      },
+      function(){
+        alert('위치 권한이 필요합니다.\n(iOS: 설정 → Safari → 위치 → 허용)');
+      },
+      { enableHighAccuracy:true, timeout:10000, maximumAge:60000 }
+    );
+  }
+
+  // initWeather를 덮어써서(기존 안산시 버튼/초기값 무시)
+  window.initWeather = function(){
+    var btnCity = document.getElementById('btnCity');
+    var btnHere = document.getElementById('btnHere');
+
+    if(btnCity){
+      btnCity.hidden = true;
+      btnCity.style.display = 'none';
+    }
+    if(btnHere){
+      btnHere.classList.add('active');
+      btnHere.onclick = loadHere;
+    }
+    loadHere();
+  };
+
+  // 혹시 최초 진입이 날씨 화면(#/weather)이라면 한번 더 갱신
+  if(String(location.hash||'').indexOf('#/weather') === 0){
+    setTimeout(function(){ try{ window.initWeather(); }catch(e){} }, 0);
+  }
+})();
+</script>
+
+<script>
+(function(){
+  const days = ['일','월','화','수','목','금','토'];
+  const pad2 = (n)=>String(n).padStart(2,'0');
+
+  const GEO_KEY = 'tbm_home_coords_v2';
+  const WX_KEY  = 'tbm_home_lastwx_v2';
+  const FETCH_INTERVAL = 10 * 60 * 1000; // 10분
+
+  let lastWx = null;
+
+  function tick(){
+    const tEl = document.getElementById('homeTime');
+    const sEl = document.getElementById('homeSec');
+    const dEl = document.getElementById('homeDate');
+    if(!tEl || !dEl) return;
+
+    const now = new Date();
+    const hh = pad2(now.getHours());
+    const mm = pad2(now.getMinutes());
+    const ss = pad2(now.getSeconds());
+
+    tEl.textContent = `${hh}:${mm}`;
+    if(sEl) sEl.textContent = ss;
+    dEl.textContent = `${now.getMonth()+1}월 ${now.getDate()}일 (${days[now.getDay()]})`;
+  }
+
+  function setChip(id, text, cls){
+    const el = document.getElementById(id);
+    if(!el) return;
+    el.textContent = text;
+    el.classList.remove('good','ok','warn','bad');
+    if(cls) el.classList.add(cls);
+  }
+
+  function setAlertSub(text){
+    const el = document.getElementById('homeAlertSub');
+    if(!el) return;
+    el.textContent = text;
+  }
+
+  function renderAlerts(items){
+    const wrap = document.getElementById('homeAlerts');
+    if(!wrap) return;
+    wrap.innerHTML = '';
+    items.forEach(it=>{
+      const div = document.createElement('div');
+      div.className = 'alert' + (it.level ? ` ${it.level}` : '');
+      div.textContent = it.text;
+      wrap.appendChild(div);
+    });
+  }
+
+  function condFromCode(code){
+    const c = Number(code);
+    if(!isFinite(c)) return { icon:'☁️', label:'흐림', cls:'ok' };
+
+    // 해/비/흐림 3분류
+    const isSunny = (c === 0 || c === 1);
+    const isRain =
+      (c >= 51 && c <= 67) || // drizzle/rain
+      (c >= 71 && c <= 77) || // snow
+      (c >= 80 && c <= 82) || // showers
+      (c >= 85 && c <= 86) || // snow showers
+      (c >= 95 && c <= 99);   // thunder
+
+    if(isSunny) return { icon:'☀️', label:'맑음', cls:'good' };
+    if(isRain)  return { icon:'🌧️', label:'비',   cls:'warn' };
+    return { icon:'☁️', label:'흐림', cls:'ok' };
+  }
+
+  function buildAlerts(wx){
+    const alerts = [];
+    const pushUnique = (level, text)=>{
+      if(!text) return;
+      if(alerts.some(a=>a.text === text)) return;
+      alerts.push({ level, text });
+    };
+
+    const feels = Number(wx.feels);
+    const wind  = Number(wx.wind);
+    const code  = Number(wx.code);
+    const cond  = condFromCode(code);
+
+    // 한랭/온열 (체감온도 기반)
+    if(isFinite(feels)){
+      if(feels <= -10) pushUnique('danger', `한랭 경고: 체감 ${Math.round(feels)}° — 작업시간 단축, 따뜻한 휴식/음료 제공, 보온장구 강화`);
+      else if(feels <= 0) pushUnique('warn', `한랭 주의: 체감 ${Math.round(feels)}° — 보온장구 착용, 주기적 휴식, 손·발 저림/저체온 증상 확인`);
+      else if(feels >= 33) pushUnique('danger', `온열 경고: 체감 ${Math.round(feels)}° — 작업강도 조절, 그늘 휴식, 수분·염분 보충, 증상자 즉시 조치`);
+      else if(feels >= 28) pushUnique('warn', `온열 주의: 체감 ${Math.round(feels)}° — 물 자주 마시기, 휴식시간 확보, 보호구 착용으로 과열 주의`);
+    }
+
+    // 풍속 (고소작업차/양중/낙하물 등)
+    if(isFinite(wind)){
+      if(wind >= 10) pushUnique('danger', `강풍 경고: 풍속 ${wind.toFixed(1)}m/s — 고소작업차/크레인 작업 중지 검토, 비산물 고정, 전도·낙하 위험 주의`);
+      else if(wind >= 6) pushUnique('warn', `강풍 주의: 풍속 ${wind.toFixed(1)}m/s — 안전대/체결상태 재확인, 자재 낙하·전도 및 장비 조작 주의`);
+    }
+
+    // 우천/젖은 환경
+    if(cond.label === '비'){
+      const lvl = (isFinite(wind) && wind >= 10) ? 'danger' : 'warn';
+      pushUnique(lvl, '우천 주의: 미끄러짐·감전 위험 — 절연/방수 보호구 착용, 활선방호 강화, 이동 동선 미끄럼/웅덩이 확인');
+    }
+
+    // 안개(시야저하)
+    if(code === 45 || code === 48){
+      pushUnique('warn', '안개 주의: 시야 저하 — 차량·장비 이동 저속, 유도자 배치, 후진 시 신호수 확보');
+    }
+
+    // 아무 경고가 없으면 안내 문구
+    if(alerts.length === 0){
+      pushUnique('', '현재 기상 기준 큰 작업경고는 없습니다. 작업 전 TBM에서 공종별 위험요인/안전대책을 확인하세요.');
+    }
+
+    // 심각도 순 정렬(danger → warn → 기본)
+    const rank = { danger: 0, warn: 1, '': 2, undefined: 2, null: 2 };
+    alerts.sort((a,b)=>(rank[a.level] ?? 2) - (rank[b.level] ?? 2));
+
+    return alerts.slice(0, 3);
+  }
+
+  function applyWx(wx){
+    // 홈 화면이 아닐 때는 아무 것도 하지 않음
+    if(!document.getElementById('chipTemp')) return;
+
+    const temp = (wx.temp != null) ? Number(wx.temp) : null;
+    const wind = (wx.wind != null) ? Number(wx.wind) : null;
+
+    const cond = condFromCode(wx.code);
+
+    if(temp != null && isFinite(temp)) setChip('chipTemp', `🌡️ 기온 ${Math.round(temp)}°`, '');
+    else setChip('chipTemp', '🌡️ 기온 -', '');
+
+    if(wind != null && isFinite(wind)){
+      let cls = '';
+      if(wind >= 10) cls = 'bad';
+      else if(wind >= 6) cls = 'warn';
+      else cls = 'good';
+      setChip('chipWind', `💨 풍속 ${wind.toFixed(1)}m/s`, cls);
+    } else {
+      setChip('chipWind', '💨 풍속 -', '');
+    }
+
+    setChip('chipCond', `${cond.icon} ${cond.label}`, cond.cls);
+
+    setAlertSub(wx.locLabel || '내 위치 기준 자동 분석');
+    renderAlerts(buildAlerts(wx));
+  }
+
+  async function getCoords(){
+    // 캐시(최대 6시간) 우선 사용
+    try{
+      const cached = JSON.parse(localStorage.getItem(GEO_KEY) || 'null');
+      if(cached && typeof cached.lat === 'number' && typeof cached.lon === 'number'){
+        const age = Date.now() - (cached.ts || 0);
+        if(age < 6 * 60 * 60 * 1000){
+          return { lat: cached.lat, lon: cached.lon, source: 'cache' };
+        }
+      }
+    }catch(e){ /* ignore */ }
+
+    if(!navigator.geolocation){
+      throw new Error('geolocation_not_supported');
+    }
+
+    return await new Promise((resolve, reject)=>{
+      navigator.geolocation.getCurrentPosition(
+        (pos)=>{
+          const c = { lat: pos.coords.latitude, lon: pos.coords.longitude, ts: Date.now() };
+          try{ localStorage.setItem(GEO_KEY, JSON.stringify(c)); }catch(e){ /* ignore */ }
+          resolve({ lat: c.lat, lon: c.lon, source: 'geo' });
+        },
+        (err)=>{
+          // 권한 거부 등: 오래된 캐시라도 있으면 사용
+          try{
+            const cached = JSON.parse(localStorage.getItem(GEO_KEY) || 'null');
+            if(cached && typeof cached.lat === 'number' && typeof cached.lon === 'number'){
+              resolve({ lat: cached.lat, lon: cached.lon, source: 'cache' });
+              return;
+            }
+          }catch(e){ /* ignore */ }
+          reject(err);
+        },
+        { enableHighAccuracy: false, timeout: 9000, maximumAge: 10 * 60 * 1000 }
+      );
+    });
+  }
+
+  async function fetchWx(lat, lon){
+    const url =
+      `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
+      `&current=temperature_2m,apparent_temperature,wind_speed_10m,weather_code` +
+      `&timezone=Asia%2FSeoul&wind_speed_unit=ms`;
+
+    const res = await fetch(url, { cache: 'no-store' });
+    const data = await res.json();
+    const cur = (data && data.current) ? data.current : {};
+
+    return {
+      ts: Date.now(),
+      temp: cur.temperature_2m,
+      feels: cur.apparent_temperature,
+      wind: cur.wind_speed_10m,
+      code: cur.weather_code
+    };
+  }
+
+  async function ensureWeather(){
+    if(!document.getElementById('chipTemp')) return;
+
+    // 최근 데이터가 있으면(10분) 재적용만
+    if(lastWx && (Date.now() - (lastWx.ts || 0) < FETCH_INTERVAL)){
+      applyWx(lastWx);
+      return;
+    }
+
+    // localStorage에 저장된 최근 데이터가 있으면 먼저 표시(UX)
+    if(!lastWx){
+      try{
+        const cached = JSON.parse(localStorage.getItem(WX_KEY) || 'null');
+        if(cached && cached.ts){
+          lastWx = cached;
+          applyWx(lastWx);
+        }
+      }catch(e){ /* ignore */ }
+    }
+
+    // 새로 가져오기
+    try{
+      const c = await getCoords();
+      const wx = await fetchWx(c.lat, c.lon);
+      wx.locLabel = (c.source === 'geo') ? '내 위치 기준 자동 분석' : '최근 위치 기준 자동 분석';
+      lastWx = wx;
+      try{ localStorage.setItem(WX_KEY, JSON.stringify(wx)); }catch(e){ /* ignore */ }
+      applyWx(wx);
+    }catch(err){
+      // 권한/네트워크 문제
+      setChip('chipTemp', '🌡️ 기온 -', '');
+      setChip('chipWind', '💨 풍속 -', '');
+      setChip('chipCond', '☁️ 흐림', 'ok');
+      setAlertSub('위치/날씨를 불러오지 못함');
+      renderAlerts([{ level:'warn', text:'위치 권한을 허용하거나 네트워크 상태를 확인하세요.' }]);
+    }
+  }
+
+  tick();
+  ensureWeather();
+  setInterval(tick, 1000);
+  setInterval(ensureWeather, 60 * 1000);
+})();
+</script>
+
 </body>
 </html>
