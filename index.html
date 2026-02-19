@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>TBM도우미</title>
   <meta name="theme-color" content="#F2F2F7">
-  <link rel="manifest" href="manifest.webmanifest?v=202602192114">
+  <link rel="manifest" href="manifest.webmanifest?v=202602192120">
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png?v=202602192114">
   <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png?v=202602192114">
   <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16.png?v=202602192114">
@@ -13,7 +13,7 @@
   <meta name="apple-mobile-web-app-title" content="TBM도우미">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="mobile-web-app-capable" content="yes">
-  <link rel="stylesheet" href="styles.css?v=202602192114">
+  <link rel="stylesheet" href="styles.css?v=202602192120">
 
   <style>
     /* 홈(첫화면) 날짜/시계 크게 */
@@ -29,14 +29,78 @@
   </style>
 </head>
 <body class="splash-on apple-pro">
+
+<!-- Icon Sprite (Apple-like line icons) v202602192120 -->
+<svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true" focusable="false">
+  <symbol id="i-helmet" viewBox="0 0 24 24">
+    <path d="M4 13a8 8 0 0 1 16 0v5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+    <path d="M8 9.5V7.5a4 4 0 0 1 8 0v2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M4 15h16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+  </symbol>
+
+  <symbol id="i-book" viewBox="0 0 24 24">
+    <path d="M6 4h10a2 2 0 0 1 2 2v14a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2V6a2 2 0 0 1 2-2Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+    <path d="M6 4v14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+  </symbol>
+
+  <symbol id="i-cloud-sun" viewBox="0 0 24 24">
+    <path d="M7.5 18h9.2a4.3 4.3 0 0 0 0-8.6 5.4 5.4 0 0 0-10.2 1.7A3.6 3.6 0 0 0 7.5 18Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+    <path d="M8.2 7.8l-.9-.9M12 6V4.8M15.8 7.8l.9-.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+  </symbol>
+
+  <symbol id="i-road" viewBox="0 0 24 24">
+    <path d="M9 21 6.8 3h2.4L11 21H9Zm4 0 1.8-18h2.4L15 21h-2Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+    <path d="M12 6v3M12 12v3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+  </symbol>
+
+  <symbol id="i-ambulance" viewBox="0 0 24 24">
+    <path d="M3 7h11v11H5a2 2 0 0 1-2-2V7Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+    <path d="M14 10h3.5l3 3V18h-6V10Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+    <path d="M7.5 12h2M8.5 11v2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M7 18.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Zm12 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z" fill="none" stroke="currentColor" stroke-width="1.8"/>
+  </symbol>
+
+  <symbol id="i-phone" viewBox="0 0 24 24">
+    <path d="M7.2 4.5 9.6 6a2 2 0 0 1 .8 2.6l-.8 1.6a14.6 14.6 0 0 0 4.2 4.2l1.6-.8a2 2 0 0 1 2.6.8l1.5 2.4a2 2 0 0 1-.6 2.7c-1.2.8-2.7 1.2-4.2.9-6.1-1.2-11.1-6.2-12.3-12.3-.3-1.5.1-3 .9-4.2a2 2 0 0 1 2.7-.6Z"
+          fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+  </symbol>
+
+  <symbol id="i-crown" viewBox="0 0 24 24">
+    <path d="M4 18h16l-1.2-10-4.3 4.3L12 6 9.5 12.3 5.2 8 4 18Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+    <path d="M6 21h12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+  </symbol>
+
+  <symbol id="i-video" viewBox="0 0 24 24">
+    <path d="M4 7a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+    <path d="M17 10.5 21 8v8l-4-2.5v-3Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+  </symbol>
+
+  <symbol id="i-hand" viewBox="0 0 24 24">
+    <path d="M7 11V6a1.5 1.5 0 0 1 3 0v5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M10 11V5.5a1.5 1.5 0 0 1 3 0V11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M13 11V6.5a1.5 1.5 0 0 1 3 0V13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M16 13v-1a1.5 1.5 0 0 1 3 0v3.5a6.5 6.5 0 0 1-6.5 6.5H11A6 6 0 0 1 5 16v-4a1.5 1.5 0 0 1 3 0v1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+  </symbol>
+
+  <symbol id="i-home" viewBox="0 0 24 24">
+    <path d="M4 11.5 12 4l8 7.5V20a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+    <path d="M9.5 22V14h5v8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+  </symbol>
+
+  <symbol id="i-back" viewBox="0 0 24 24">
+    <path d="M14.5 5 7 12l7.5 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M8 12h12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+  </symbol>
+</svg>
+
 <div id="splash" class="splash" aria-label="TBM도우미 시작화면">
   <img class="splash-img" src="assets/splash.jpg?v=202602192114" alt="TBM도우미 시작화면"/>
 </div>
 
 <header class="topbar">
   <div class="topbar-left">
-    <button id="btnBack" class="icon-btn" aria-label="뒤로" hidden>⬅</button>
-    <button id="btnHome" class="icon-btn" aria-label="홈" hidden>🏠</button>
+    <button id="btnBack" class="icon-btn" aria-label="뒤로" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-back"></use></svg></button>
+    <button id="btnHome" class="icon-btn" aria-label="홈" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-home"></use></svg></button>
     <div class="topbar-title">
       <div class="title" id="pageTitle">TBM도우미</div>
       <div class="subtitle" id="pageSub">안산지사 전력공급부</div>
@@ -59,7 +123,7 @@
       </div>
     </div>
     <a class="card nav" href="#/trades">
-      <div class="card-icon gear">👷</div>
+      <div class="card-icon gear"><svg class="ico" aria-hidden="true"><use href="#i-helmet"></use></svg></div>
       <div class="card-body">
         <div class="card-title">공종별 위험요인 및 안전대책</div>
         <div class="card-sub">가공·지중 배전공사 공종 선택 → 표로 확인</div>
@@ -68,7 +132,7 @@
     </a>
 
     <a class="card nav" href="#/refs">
-      <div class="card-icon ok">📙</div>
+      <div class="card-icon ok"><svg class="ico" aria-hidden="true"><use href="#i-book"></use></svg></div>
       <div class="card-body">
         <div class="card-title">안전수칙</div>
         <div class="card-sub">골든룰스 11 · TBM 가이드 · 5대 안전지킴이</div>
@@ -77,7 +141,7 @@
     </a>
 
     <a class="card nav" href="#/weather">
-      <div class="card-icon cloud">🌤</div>
+      <div class="card-icon cloud"><svg class="ico" aria-hidden="true"><use href="#i-cloud-sun"></use></svg></div>
       <div class="card-body">
         <div class="card-title">현장 날씨·미세먼지</div>
         <div class="card-sub">실시간 기상 정보 및 작업 안전 경고</div>
@@ -86,7 +150,7 @@
     </a>
 
     <a class="card nav" href="#/streetview">
-      <div class="card-icon cloud">🛣</div>
+      <div class="card-icon cloud"><svg class="ico" aria-hidden="true"><use href="#i-road"></use></svg></div>
       <div class="card-body">
         <div class="card-title">거리뷰(현장 확인)</div>
         <div class="card-sub">현재 위치 주변 거리뷰/로드뷰 바로가기</div>
@@ -95,7 +159,7 @@
     </a>
 
     <a class="card nav" href="#/emergency">
-      <div class="card-icon folder">🚑</div>
+      <div class="card-icon folder"><svg class="ico" aria-hidden="true"><use href="#i-ambulance"></use></svg></div>
       <div class="card-body">
         <div class="card-title">응급의료시설(위치기반)</div>
         <div class="card-sub">현재 위치 기준 응급실/응급의료기관 검색 바로가기</div>
@@ -105,7 +169,7 @@
 
   
     <a class="card nav" href="#/contacts">
-      <div class="card-icon cloud">📞</div>
+      <div class="card-icon cloud"><svg class="ico" aria-hidden="true"><use href="#i-phone"></use></svg></div>
       <div class="card-body">
         <div class="card-title">비상 연락망</div>
         <div class="card-sub">회사/현장 연락처 저장 · 바로 전화</div>
@@ -156,7 +220,7 @@
     <div class="desc">현장에서의 기본 안전수칙을 모았습니다.</div>
     <div class="list" id="refsList">
       <a class="card nav" href="#/refs/golden11">
-        <div class="card-icon shield">👑</div>
+        <div class="card-icon shield"><svg class="ico" aria-hidden="true"><use href="#i-crown"></use></svg></div>
         <div class="card-body">
           <div class="card-title">골든룰스 11</div>
           <div class="card-sub">TBM 전 핵심 확인 항목 11가지</div>
@@ -165,7 +229,7 @@
       </a>
 
       <a class="card nav" href="#/refs/tbmguide">
-        <div class="card-icon cloud">🎥</div>
+        <div class="card-icon cloud"><svg class="ico" aria-hidden="true"><use href="#i-video"></use></svg></div>
         <div class="card-body">
           <div class="card-title">TBM 가이드</div>
           <div class="card-sub">유튜브 영상으로 TBM 작성 방법 보기</div>
@@ -174,7 +238,7 @@
       </a>
 
       <a class="card nav" href="#/refs/safety5">
-        <div class="card-icon ok">🖐</div>
+        <div class="card-icon ok"><svg class="ico" aria-hidden="true"><use href="#i-hand"></use></svg></div>
         <div class="card-body">
           <div class="card-title">5대 안전지킴이</div>
           <div class="card-sub">안전장구 · 안전회의 · 검전접지 · 활선방호 · 작업절차</div>
@@ -392,7 +456,7 @@
 
       <div class="grid2">
         <a class="card nav" id="linkGoogle" target="_blank" rel="noopener">
-          <div class="card-icon cloud">🗺️</div>
+          <div class="card-icon cloud"><svg class="ico" aria-hidden="true"><use href="#i-cloud-sun"></use></svg></div>
           <div class="card-body">
             <div class="card-title">Google 지도</div>
             <div class="card-sub">주변 “응급실” 검색</div>
@@ -401,7 +465,7 @@
         </a>
 
         <a class="card nav" id="linkNaver" target="_blank" rel="noopener">
-          <div class="card-icon cloud">🧭</div>
+          <div class="card-icon cloud"><svg class="ico" aria-hidden="true"><use href="#i-cloud-sun"></use></svg></div>
           <div class="card-body">
             <div class="card-title">네이버 지도</div>
             <div class="card-sub">주변 “응급실” 검색</div>
@@ -412,7 +476,7 @@
 
       <div class="grid2">
         <a class="card nav" id="linkKakao" target="_blank" rel="noopener">
-          <div class="card-icon cloud">📍</div>
+          <div class="card-icon cloud"><svg class="ico" aria-hidden="true"><use href="#i-cloud-sun"></use></svg></div>
           <div class="card-body">
             <div class="card-title">카카오맵</div>
             <div class="card-sub">“응급실” 검색</div>
@@ -421,7 +485,7 @@
         </a>
 
         <a class="card nav" id="linkEgen" target="_blank" rel="noopener">
-          <div class="card-icon cloud">🚑</div>
+          <div class="card-icon cloud"><svg class="ico" aria-hidden="true"><use href="#i-cloud-sun"></use></svg></div>
           <div class="card-body">
             <div class="card-title">응급의료포털(E-GEN)</div>
             <div class="card-sub">응급의료기관 찾기</div>
@@ -533,7 +597,7 @@
 </template>
 
 <script src="data.js"></script>
-<script src="app.js?v=202602192114"></script>
+<script src="app.js?v=202602192120"></script>
 
 <script>
 /* 날씨 화면: 안산시 고정 제거 → 현재 위치 기반 */

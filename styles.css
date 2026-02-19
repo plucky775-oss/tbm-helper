@@ -666,3 +666,19 @@ input:focus,select:focus,textarea:focus{
   .seg-btn.active{ background: rgba(44,44,46,.96); }
   .kpi, .wrow{ background: rgba(44,44,46,.70); }
 }
+
+
+
+/* === Line icon system (sprite + <svg class="ico">) === */
+.card-icon{ display:grid !important; place-items:center; }
+.ico{ width:24px; height:24px; display:block; color: currentColor; }
+.card-icon .ico{ width:24px; height:24px; }
+.icon-btn .ico{ width:22px; height:22px; }
+.card-icon{
+  color: var(--brand);
+}
+.card-icon.folder{ color: #34C759; }   /* green */
+.card-icon.ok{ color: #0A84FF; }       /* blue */
+.card-icon.cloud{ color: #AF52DE; }    /* purple */
+.card-icon.shield{ color: #FF9F0A; }   /* orange */
+.card-icon.gear{ color: #0A84FF; }     /* blue */
