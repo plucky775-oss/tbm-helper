@@ -1,201 +1,90 @@
-/* KEPCO TBM Helper - Modern Professional Theme */
+/* KEPCO TBM Helper - 정밀 리디자인 버전 */
 :root {
-  /* Brand Colors */
-  --brand-navy: #1a2a40;      /* 깊은 신뢰감을 주는 네이비 */
-  --brand-blue: #3b6885;      /* 메인 브랜드 블루 */
-  --accent-amber: #d48832;    /* 안전/경고 포인트 컬러 */
-  --accent-light: #fdf2e9;    /* 앰버 배경 연색 */
-
-  /* Semantic Colors */
-  --status-good: #10b981;
-  --status-warn: #fbbf24;
-  --status-danger: #f43f5e;
-
-  /* Surface & Text */
-  --bg-main: #f8fafc;         /* 눈이 편안한 오프 화이트 */
-  --card-white: #ffffff;
-  --border-subtle: #e2e8f0;
-  --text-primary: #0f172a;    /* 슬레이트 다크 */
-  --text-muted: #64748b;
-
-  /* Shadow & Radius */
-  --shadow-card: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -2px rgba(0,0,0,0.04);
-  --radius-lg: 20px;
-  --radius-md: 14px;
+  --navy: #1e293b;
+  --blue: #334155;
+  --amber: #d97706;
+  --bg: #f1f5f9;
+  --card: #ffffff;
+  --stroke: #e2e8f0;
+  --text: #0f172a;
+  --muted: #64748b;
+  --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
 }
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Pretendard', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
 
-body {
-  margin: 0;
-  background-color: var(--bg-main);
-  color: var(--text-primary);
-  font-family: 'Pretendard', system-ui, -apple-system, sans-serif;
-  line-height: 1.6;
-}
-
-/* --- 상단 바 (Topbar) --- */
+/* --- 상단바: 묵직하고 깔끔하게 --- */
 .topbar {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: linear-gradient(135deg, var(--brand-navy), var(--brand-blue));
-  padding: calc(16px + env(safe-area-inset-top, 0px)) 20px 20px;
-  color: #fff;
-  border-bottom-left-radius: 24px;
-  border-bottom-right-radius: 24px;
-  box-shadow: var(--shadow-card);
+  position: sticky; top: 0; z-index: 50;
+  background: var(--navy); color: #fff;
+  padding: calc(12px + env(safe-area-inset-top, 0px)) 16px 16px;
+  border-bottom-left-radius: 20px; border-bottom-right-radius: 20px;
 }
+.topbar-title .title { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
+.topbar-title .subtitle { font-size: 12px; opacity: 0.7; margin-top: 2px; }
 
-.topbar-title .title {
-  font-size: 24px;
-  font-weight: 800;
-  letter-spacing: -0.5px;
-}
-
-.topbar-title .subtitle {
-  font-size: 13px;
-  opacity: 0.85;
-  font-weight: 500;
-  margin-top: 2px;
-}
-
-.icon-btn {
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  border: none;
-  background: rgba(255, 255, 255, 0.15);
-  color: #fff;
-  backdrop-filter: blur(10px);
-  cursor: pointer;
-  display: grid;
-  place-items: center;
-  transition: transform 0.2s;
-}
-
-.icon-btn:active { transform: scale(0.92); background: rgba(255, 255, 255, 0.25); }
-
-/* --- 메인 홈 시계 위젯 --- */
+/* --- 시계 위젯: 시인성 극대화 --- */
 .home-clock {
-  background: var(--card-white);
-  border-radius: var(--radius-lg);
-  padding: 32px 20px;
-  text-align: center;
-  border: 1px solid var(--border-subtle);
-  box-shadow: var(--shadow-card);
-  margin-bottom: 24px;
-  position: relative;
-  overflow: hidden;
+  background: var(--card); border-radius: 24px; padding: 24px;
+  text-align: center; border: 1px solid var(--stroke);
+  box-shadow: var(--shadow); margin: 16px 0 24px;
 }
+.home-clock-date { font-size: 15px; font-weight: 700; color: var(--amber); margin-bottom: 4px; }
+.home-clock-time { font-size: 60px; font-weight: 900; color: var(--navy); letter-spacing: -2px; line-height: 1; }
+.home-clock-sec { font-size: 24px; color: var(--muted); margin-left: 4px; }
 
-.home-clock::before {
-  content: "";
-  position: absolute;
-  top: -20px; right: -20px;
-  width: 100px; height: 100px;
-  background: radial-gradient(circle, var(--accent-light) 0%, transparent 70%);
-}
-
-.home-clock-date {
-  font-size: 17px;
-  font-weight: 700;
-  color: var(--accent-amber);
-  margin-bottom: 10px;
-}
-
-.home-clock-time {
-  font-size: 68px;
-  font-weight: 900;
-  color: var(--brand-navy);
-  letter-spacing: -2px;
-  line-height: 1;
-}
-
-.home-clock-sec {
-  font-size: 28px;
-  color: var(--text-muted);
-  margin-left: 8px;
-  font-weight: 600;
-}
-
-/* --- 공통 카드 UI --- */
-.container { max-width: 600px; margin: 0 auto; padding: 20px 16px 40px; }
+/* --- 컨테이너 및 카드 구조 개선 --- */
+.container { max-width: 600px; margin: 0 auto; padding: 0 16px 40px; }
 
 .card {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  background: var(--card-white);
-  border-radius: var(--radius-md);
-  padding: 20px;
-  text-decoration: none;
-  color: inherit;
-  margin-bottom: 14px;
-  border: 1px solid var(--border-subtle);
-  transition: all 0.2s ease;
-  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+  display: flex; align-items: center; gap: 12px;
+  background: var(--card); border-radius: 16px; padding: 16px;
+  text-decoration: none; color: inherit; margin-bottom: 12px;
+  border: 1px solid var(--stroke); box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
+.card:active { background: #f8fafc; transform: scale(0.98); }
 
-.card:active {
-  transform: translateY(2px) scale(0.98);
-  box-shadow: none;
+.card-icon {
+  width: 48px; height: 48px; border-radius: 12px;
+  display: grid; place-items: center; font-size: 22px; flex-shrink: 0;
   background: #f1f5f9;
 }
 
-.card-icon {
-  width: 54px;
-  height: 54px;
-  border-radius: 16px;
-  display: grid;
-  place-items: center;
-  font-size: 26px;
-  flex-shrink: 0;
-}
-
-/* 아이콘별 부드러운 배경색 */
-.card-icon.gear { background: #eff6ff; color: #3b82f6; }
-.card-icon.ok { background: #ecfdf5; color: #10b981; }
-.card-icon.cloud { background: #fffbeb; color: #f59e0b; }
-.card-icon.folder { background: #fdf2f8; color: #db2777; }
-
 .card-body { flex: 1; min-width: 0; }
-.card-title { font-weight: 800; font-size: 17px; margin-bottom: 4px; color: var(--brand-navy); }
-.card-sub { font-size: 13px; color: var(--text-muted); line-height: 1.4; }
-.card-arrow { color: #cbd5e1; font-size: 22px; }
+.card-title { font-weight: 700; font-size: 16px; color: var(--navy); margin-bottom: 2px; }
+.card-sub { font-size: 13px; color: var(--muted); line-height: 1.4; }
 
-/* --- 날씨 위젯 세부 스타일 --- */
-.wx-feel {
-  font-size: 52px;
-  font-weight: 900;
-  background: linear-gradient(to bottom, var(--brand-navy), var(--brand-blue));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+/* --- 패널 및 설명 박스 --- */
+.panel { display: flex; flex-direction: column; gap: 16px; padding-top: 16px; }
+.desc { 
+  background: #e2e8f0; border-radius: 12px; padding: 12px 16px;
+  color: var(--blue); font-size: 13px; font-weight: 600; line-height: 1.5;
 }
 
-.kpi {
-  background: #fff;
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  padding: 16px;
-  text-align: center;
+/* --- 상세 정보용 hcard (응급실 등) --- */
+.hcard {
+  background: #fff; border: 1px solid var(--stroke); border-radius: 16px;
+  padding: 16px; margin-bottom: 12px; box-shadow: var(--shadow);
 }
+.hhead { display: flex; gap: 12px; align-items: flex-start; }
+.htitle { font-weight: 800; font-size: 16px; color: var(--navy); }
+.mini-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
 
-/* --- 버튼 스타일 --- */
+/* --- 버튼 & 입력 --- */
 .pill-btn {
-  border-radius: 999px;
-  padding: 14px 28px;
-  font-weight: 800;
-  border: none;
-  cursor: pointer;
-  transition: background 0.2s, transform 0.1s;
-  font-size: 15px;
+  border-radius: 10px; padding: 10px 16px; font-weight: 700;
+  font-size: 14px; border: none; cursor: pointer; transition: 0.2s;
+}
+.pill-btn.primary { background: var(--navy); color: #fff; }
+.pill-btn:active { opacity: 0.8; }
+
+input, textarea {
+  width: 100%; border: 1px solid var(--stroke); border-radius: 10px;
+  padding: 12px; font-size: 14px; margin-top: 4px;
 }
 
-.pill-btn.primary {
-  background: var(--brand-navy);
-  color: #fff;
-  box-shadow: 0 4px 12px rgba(26, 42, 64, 0.25);
-}
-
-.pill-btn.primary:active { transform: scale(0.96); }
+/* --- 표(Table) 최적화 --- */
+table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 12px; overflow: hidden; }
+th { background: #f8fafc; padding: 12px; font-size: 12px; color: var(--muted); border-bottom: 1px solid var(--stroke); }
+td { padding: 12px; font-size: 14px; border-bottom: 1px solid var(--stroke); vertical-align: top; }
